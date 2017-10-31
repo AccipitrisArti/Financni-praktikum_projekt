@@ -69,7 +69,19 @@ Za dominantno množico lahko torej vedno definiramo otežen vektor.
 Če je C dominantna množica A, potem je njen otežen vektor $x^C$ rešitev zgornjega problema. Obratno, če je x* rešitev zgornjega problema, potem je njegova podpora $\sigma = \sigma(x^*)$ dominantna množica od A pri pogoju, da je $W_{\sigma\cup\{i\}}(i) \not= 0$ za vse $i \notin \sigma$.
 \end{theorem}
 
-
-
+\section{Povezava s teorijo grafov}
+Naj bo $G=(V,E)$ neusmerjen graf, kjer je $V={1,2,\ldots,n}$ množica vozlišč in $E\subseteq V\times V$ množica povezav v grafu. Dve vozlišči $u, v \in V$ sta sosednji, če $(u, v) \in E$. Podmnožici vozlišč $C \subseteq V$ pravimo klika, če so si vsa vozlišča iz te množice med seboj sosednja.\\
+Klika C na neusmerjenem grafu F je največja (maximal), če ne obstaja klika D na grafu G, tako da $C \subseteq D$ in $C \not= D$. Kliko C imenujemo maksimalna (maximum) klika, če ne obstaja klika na grafu G, ki bi vsebovala več vozlišč kot največja klika C. Število vozlišč v maksimalni kliki imenujemo klično število (clique number) in ga označimo z $\omega(G)$. \\
+Matrika sosednosti grafa G je kvadratna matrika $A_G$, kjer je $(A_G)_{i,j}=1$, če $(i,j)\in E$, sicer pa $(A_G)_{i,j}=0$.\\
+Na matriko sosednosti v neusmrejnem grafu lahko gledamo kot na matriko podobnosti v problemu razvrščanja in posledično lahko uporabimo dominantno množico da najdemo združbe znotraj grafa.\\
+Glede na povezavo z teorijo optimizacije, upoštevamo naslednji kvadratični program
+\begin{gather}
+max f_\alpha(x) = x^T(A_G + \alpha I)x \\
+\text{p. p. } x\in\Delta \subset \mathbb{R}^n
+\end{gather}
+Kjer je I identična matrika, $\alpha$ realno število in $\Delta$ simpleks.
+\begin{theorem}
+Naj bo graf G neusmerjen z matriko sosednosti $A_G$ in naj bo $0 < \alpha < 1$. Vsaka največja klika C grafa G je dominantna množica od $A_\alpha = A_G + \alpha I$. Obratno, če je C dominantna množica od $A_\alpha$ potem je C največja klika v G.
+\end{theorem}
 
 \end{document}
