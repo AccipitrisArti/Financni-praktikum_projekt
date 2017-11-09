@@ -1,0 +1,425 @@
+\documentclass[a4paper]{article}
+\usepackage[slovene]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{marvosym}
+\usepackage{amssymb,amsmath}
+\title{Razvrščanje z dominantnimi množicami - povzetek}
+\author{Taja Debeljak, Anže Marinko \\ Finančni praktikum \\ Finančna matematika, Fakulteta za matematiko in fiziko}
+\date{Jesen 2017}
+
+\newtheorem{definition}{Definicija}[section]
+\newtheorem{theorem}{Izrek}
+
+\begin{document}
+\maketitle
+\section{Uvod}
+Grupiranje (ang. Clustering) je postopek razvrščanja predmetov znotraj razreda v podrazrede (cluster) tako, da so si predmeti znotraj istega podrazreda bolj podobni med sabo, kot so si podobni z elementi iz ostalih podrazredov. \\
+Problem združevanja lahko opišemo z uteženim grafom, ki ga definiramo kot trojico $G = (V,E,\omega)$, kjer je $V = {1,\ldots,n}$ končna množica vozlišč, $E \subseteq V \times V$ množica usmerjenih
+povezav in $\omega: E \rightarrow \mathbb{R}$ funkcija, ki vsakemu vozlišču dodeli neko vrednost(težo). Vozlišča grafa G ustrezajo predmetom, ki jih je potrebno združevati. \\
+Povezave predstavljajo, kateri predmeti so med seboj povezani, utežene povezave pa odražajo podobnosti med povezanimi predmeti. Poleg tega matrika $A_{i,j} = \omega(i,j) \text{ za vse } i, j \in V$ predstavlja podobnost med vozlišči. Imenujemo jo matrika podobnosti. \\
+Osnovni lastnosti, ki morata zadostovati gruči, sta:
+\begin{itemize}
+\item Notranja homogenost: elementi, ki pripadajo gruči si morajo biti med seboj podobni
+\item Maksimalnost: gruče ne moremo dodatno razširiti z uvedbo zunanjih elementov
+\end{itemize}
+
+\begin{definition}
+Naj graf G predstavlja primer združevanja množic in naj bo $C \subseteq V$ neprazna podmnožica. \textit{Povprečna utežena vhodna stopnja} glede na C je definirana kot
+$$awindeg_C(i) = \frac{1}{\lvert C \rvert}\sum_{j\in C}A_{i,j}$$
+kjer $\lvert C \rvert$ predstavlja velikost množice C. Za $j\in C$ definiramo
+$$\phi_C(i,j) = A_{i,j} - awindeg_C(j)$$
+Funkcija $\phi_C(i,j)$ je \textit{mera relativne podobnosti} elementa i z elementom j glede na povprečno povezanost elementa i z elementi iz C.\\
+\textit{Težo elementa} i glede na množico C definiramo kot
+$$W_C(i)=\begin{cases}
+1& \text{; če $\lvert C \rvert = 1$},\\
+\sum_{j\in C\setminus{i}}\phi_{C\{i\}}(i,j)W_{C\setminus\{i\}}(j)& \text{; sicer}.
+\end{cases}$$
+Vrednost $W_C(i)$ nam pove koliko podpore prejme element i od elementov $C\setminus\{i\}$ glede na skupno podobnost z elementi iz $C\setminus\{i\}$. Pozitivne vrednosti nam povedo da je i močno
+koleriran z $C\setminus\{i\}$.\\
+\textit{Skupna teža množice} C pa je definirana z
+$$W(C) = \sum_{i\in C}W_C(i)$$
+\end{definition}
+\begin{definition}{Dominantna množica}\\
+Neprazni množici $C \subseteq V$ za katero je $W(T) > 0$ za vsako neprazno množico $T \subseteq C$ pravimo dominantna množica, če velja:
+\begin{enumerate}
+\item $W_C(i) > 0$ za vse $i \in C$
+\item $W_{C\cup\{i\}}(i) < 0$ za vse $i \notin C$
+\end{enumerate}
+\end{definition}
+
+\section{Povezava s teorijo optimizacije}
+Če se omejimo na simetrične povezanosti, torej A je simetrična matrika, potem lahko dominantno množico zapišemo kot rešitev naslednjega standardnega kvadratičnega programa
+\begin{gather}
+max f(x) = x^TAx \\
+\text{p. p. } x\in\Delta \subset \mathbb{R}^n
+\end{gather}
+Kjer je $\Delta = \{x\in\mathbb{R}^n: \sum_{j\in V}x_j = 1 \text{ in } x_j \geq 0 \text{ za vsak } j\in V\}$ standardni simpleks iz $\mathbb{R}^n$.\\ \newline
+Pravimo, da je x rešitev zgornjega problema če obstaja soseščina x-a $U\subseteq \Delta$ za katero je $f(x) > f(z)$ za vsak $z \in U\setminus\{x\}$. Podpora $\sigma(x)$ za $x\in\Delta$ je definirana kot indeksna množica pozitivnih komponenta vektorja x, torej $\sigma(x) = \{i\in V : x_i>0\}$.
+
+\begin{definition}{Otežen vektor} \\
+Za neprazno podmnožico C množice V lahko definiramo otežen vektor $x^C\in\Delta$, če ima množica C pozitivno skupno težo W(C). V tem primeru je
+$$x^C_i=\begin{cases}
+\frac{W_C(i)}{W(C)}& \text{; če $i \in C$},\\
+0& \text{; sicer}.
+\end{cases}$$
+Za dominantno množico lahko torej vedno definiramo otežen vektor.
+\end{definition}
+\begin{theorem}
+Če je C dominantna množica A, potem je njen otežen vektor $x^C$ rešitev zgornjega problema. Obratno, če je x* rešitev zgornjega problema, potem je njegova podpora $\sigma = \sigma(x^*)$ dominantna množica od A pri pogoju, da je $W_{\sigma\cup\{i\}}(i) \not= 0$ za vse $i \notin \sigma$.
+\end{theorem}
+
+\section{Povezava s teorijo grafov}
+Naj bo $G=(V,E)$ neusmerjen graf, kjer je $V={1,2,\ldots,n}$ množica vozlišč in $E\subseteq V\times V$ množica povezav v grafu. Dve vozlišči $u, v \in V$ sta sosednji, če $(u, v) \in E$. Podmnožici vozlišč $C \subseteq V$ pravimo klika, če so si vsa vozlišča iz te množice med seboj sosednja.\\
+Klika C na neusmerjenem grafu F je največja (maximal), če ne obstaja klika D na grafu G, tako da $C \subseteq D$ in $C \not= D$. Kliko C imenujemo maksimalna (maximum) klika, če ne obstaja klika na grafu G, ki bi vsebovala več vozlišč kot največja klika C. Število vozlišč v maksimalni kliki imenujemo klično število (clique number) in ga označimo z $\omega(G)$. \\
+Matrika sosednosti grafa G je kvadratna matrika $A_G$, kjer je $(A_G)_{i,j}=1$, če $(i,j)\in E$, sicer pa $(A_G)_{i,j}=0$.\\
+Na matriko sosednosti v neusmrejnem grafu lahko gledamo kot na matriko podobnosti v problemu razvrščanja in posledično lahko uporabimo dominantno množico da najdemo združbe znotraj grafa.\\
+Glede na povezavo z teorijo optimizacije, upoštevamo naslednji kvadratični program
+\begin{gather}
+max f_\alpha(x) = x^T(A_G + \alpha I)x \\
+\text{p. p. } x\in\Delta \subset \mathbb{R}^n
+\end{gather}
+Kjer je I identična matrika, $\alpha$ realno število in $\Delta$ simpleks.
+\begin{theorem}
+Naj bo graf G neusmerjen z matriko sosednosti $A_G$ in naj bo $0 < \alpha < 1$. Vsaka največja klika C grafa G je dominantna množica od $A_\alpha = A_G + \alpha I$. Obratno, če je C dominantna množica od $A_\alpha$ potem je C največja klika v G.
+\end{theorem}
+
+\section{Razvrščanje z uporabo dmoinantnih množic}
+Naivna strategijabi lahko bilo oštevilčenje vseh podmnožic $C\subseteq V$ preverjanje pogojev iz Definicije 1. Ta rešitev je očitno precej neučinkovita, zato si bomo ogledali dve alternativni strategiji. Obe rešitvi izvirata iz teorije iger.
+
+\subsection{Dinamika ponovitev}
+The Replicator Dynamics (RD) are deterministic game dynamics
+that have been developed in evolutionary game theory. This theory
+originated in the early 1970s as an attempt to apply the principles
+and tools of game theory to biological contexts, with a view to
+model the evolution of animal, as opposed to human, behavior
+(see the classical work by Maynard Smith, 1982 who pioneered
+the field). It considers an idealized scenario whereby individuals
+are repeatedly drawn at random from a large, ideally infinite,
+population to play a two-player game. In contrast to classical
+game theory, here players are not supposed to behave rationally
+or to have complete knowledge of the details of the game. They
+act instead according to an inherited behavioral pattern, or pure
+strategy, and it is supposed that some evolutionary selection
+process operates over time on the distribution of behaviors. A
+general class of evolution equations is given by the following set
+of ordinary differential equations ( Weibull, 1997 ):
+x˙ i = x i g i ( x ) (7)
+for i = 1 . . . n, where a dot signifies derivative with respect to time
+and g = (g 1 , . . . , g n ) is a function with open domain containing .
+Here, the function g i specifies the rate at which pure strategy i
+replicates. It is usually required that the growth function g is regular
+( Weibull, 1997 ), which means that it is Lipschitz continuous
+and that g( x ) 	 x = 0 for all x ∈ . The former condition guarantees
+that the system of the differential equation (7) has a unique
+solution through any initial population state. The latter condition,
+instead, ensures that the simplex  is invariant under (7) , namely,
+any trajectory starting in  will remain in .
+A point x is said to be a stationary (or equilibrium) point for
+our dynamical systems, if x˙ i = 0 ( i ∈ S ). A stationary point x is
+(Lyapunov) stable if for every neighborhood U of x there exists a
+neighborhood V of x such that x (0) ∈ V implies x ( t ) ∈ U for all
+t ≥ 0. A stationary point is said to be asymptotically stable if any
+trajectory starting in its vicinity will converge to it as t → ∞ .
+Payoff-monotonic game dynamics represent a wide class of
+regular selection dynamics for which useful properties hold. Intuitively,
+for a payoff-monotonic dynamics the strategies associated
+to higher payoffs will increase at a higher rate. Formally, a regular
+selection dynamics (7) is said to be payoff-monotonic if
+g i ( x ) > g j ( x ) ⇔ (A x ) i > (A x ) j
+for all x ∈  and i , j ∈ V .
+Although this class contains many different dynamics, it turns
+out that they share a lot of common properties. To begin, they
+all have the same set of stationary points. Indeed, x ∈  is a
+stationary point under any payoff monotonic dynamics if and only
+if (A x ) i = x 	 A x holds for all i ∈ σ( x ) ( Weibull, 1997 ).
+A well-known subclass of payoff-monotonic game dynamics is
+given by
+x˙ i = x i
+
+φ( (A x ) i ) −
+
+j∈ V
+x j φ
+
+(A x ) j
+	
+
+
+,
+where φ( u ) is an increasing function of u . These models arise in
+modeling the evolution of behavior by way of imitation processes,
+where players are occasionally given the opportunity to change
+their own strategies ( Weibull, 1997 ).
+When φ is the identity function, that is, φ(u ) = u, we obtain
+the standard continuous-time replicator equations ,
+x˙ i = x i
+
+(A x ) i − x
+	 A x
+
+, (8)
+whose basic idea is that the average rate of increase x˙ i /x i equals
+the difference between the average fitness of strategy i and the
+mean fitness over the entire population.
+Another popular model arises when φ(u ) = e ku , where k is
+a positive constant. As k tends to 0, the orbits of this dynamics
+approach those of the standard, first-order replicator model,
+slowed down by the factor k ; moreover, for large values of k , the
+model approximates the so-called best-reply dynamics ( Hofbauer
+& Sigmund, 1998 ).
+The replicator dynamics, and more in general any payoff
+monotonic dynamics, have the following properties ( Hofbauer &
+Sigmund, 2003; Weibull, 1997 ):
+Theorem 4. Under any payoff monotonic dynamics the following
+holds true:
+• a Nash equilibrium is a stationary point;
+• a strict Nash equilibrium is asymptotically stable;
+• a stationary point x ∗ that is the limit of an interior orbit, i.e. , such
+that σ ( x (t)) = V for all t ≥ 0 and lim t→∞ x (t ) = x ∗
+, is a Nash
+equilibrium
+• a stable stationary point is a Nash equilibrium;
+• an ESS is asymptotically stable.
+In general, the converse of the implications in Theorem 4 do
+not hold.
+Furthermore, if we restrict our focus to symmetric payoff
+matrices, i.e. , A = A 	 , then stronger properties hold, as stated in
+the following theorem.
+Theorem 5. If A = A 	 then the following holds:
+• x 	 A x is strictly increasing along any non-constant trajectory of
+(8) . In other words, for all t ≥ 0 we have d
+dt [ x (t ) 	 A x (t )] > 0 ,
+unless x is a stationary point. Furthermore, any such trajectory
+converges to a (unique) stationary point;
+• x is asymptotically stable if and only if x is an ESS.
+In order to implement the continuous-time replicator dynamics
+one can resort to some iterative method like, e.g. , the Runge-Kutta
+method, to find an approximate solution to the ordinary differential
+equations. Alternatively, one can adopt the discrete-time
+counterpart of (8) , known as discrete-time replicator dynamics,
+which are given by
+x i (t + 1) = x i (t )
+(A x (t)) i
+x (t ) 	 A x (t )
+,
+for i ∈ V . Note that the discrete-time replicator dynamics are
+simplex-invariant if A is nonnegative. This, however, is not a limitation
+because any payoff A preserves its equilibria by a constant
+shift. Hence, if A has negative entries, one can build a matrix
+A = A + μE with positive entries by a proper choice of μ > 0,
+where E is a matrix of all ones.
+Since ESSs are asymptotically stable under the replicator
+dynamics according to Theorems 4 and 5 , we can employ this
+dynamics for the extraction of dominant sets, which are indeed in
+correspondence to ESSs as described in Section 2.4 . Moreover, if
+we assume symmetric payoff functions, we recover again the link
+to optimization theory shown in Section 2.2 , for Theorem 5 implies
+that the replicator dynamics locally maximize x 	 A x over the
+simplex. Finally, motivated by the link to graph theory described
+in Section 2.3 , replicator dynamics have also been employed as
+heuristics for the maximum clique problem ( Pelillo & Torsello,
+2006; Wu & Hao, 2015 ).
+3.2. Infection and immunization dynamics
+The Infection and Immunization Dynamics (InImDyn) are a class
+of discrete-time dynamics that have been introduced in Rota Bulò
+and Bomze (2011) to overcome some computational problems
+afflicting standard evolutionary dynamics, including the replicator
+dynamics. To mention a few, evolutionary dynamics like replicator
+dynamics have a quadratic space/time complexity per iteration,
+not all stationary points are Nash equilibria, they converge only
+in the limit of infinitely-many iterations, and the detection of
+the support of an equilibrium is cumbersome if the dynamics is
+stopped before proper convergence ( i.e. , after finitely-many steps).
+The InImDyn dynamics take the following form:
+x (t + 1) = δS( x ) ( x )[ S( x ) − x ] + x , (9)
+where we wrote x for x ( t ). The function S :  →  is a strategy
+selection function that satisfies the following property:
+S( x ) =
+
+y for some y ∈ ϒ( x ) if ϒ( x )  = ∅ ,
+x otherwise ,
+(10)
+where Y( x ) represents the set of so-called infective strategies for x
+defined as
+ϒ( x ) = { y ∈  : ( y − x )
+	 A x > 0 } .
+As long as there exists y ∈ Y( x ), the strategy x cannot be an equilibrium
+by definition of infective strategy. If this is the case, the
+dynamics (9) blends x and y (infects x with y ) until the violation
+of the Nash condition caused by y vanishes, which happens by
+considering a mixing factor δy ( x ) given by
+δy ( x ) =
+
+min
+
+
+( x −y ) 	 A x
+( y −x ) 	 A ( y −x ) , 1
+
+, if ( y − x ) 	 A ( y − x ) < 0
+1 , otherwise .
+(11)
+The InImDyn dynamics yields a fixed point when ϒ( x ) = ∅ . If
+this is the case, x is also a Nash equilibrium:
+Theorem 6. Let x ∈  be a strategy. Then the following statements
+are equivalent:
+(a) ϒ( x ) = ∅ : there is no infective strategy for x ;
+(b) x is a Nash strategy;
+(c) x is a fixed point under dynamics (9) .
+Proof. See Rota Bulò and Bomze (2011) . 
+Akin to the replicator dynamics, if we restrict to symmetric
+payoff matrices, we have that the average payoff is strictly
+increasing along any non-constant trajectory of InImDyn:
+Theorem 7. Let { x ( t )} t ≥ 0 be a trajectory of (9) . Then for all t ≥ 0,
+u ( x (t + 1) , x (t + 1) ) ≥ u ( x (t ) , x (t ) ) ,
+with equality if and only if x (t ) = x (t + 1) , provided that the payoff
+matrix is symmetric.
+Proof. See Rota Bulò and Bomze (2011) . 
+Depending on the choice of S( x ) in (9) , we may obtain
+different dynamics. In the rest of the section, we review one
+in particular, which is simple and leads to nice properties. Let
+u ∈ arg max j ∈ V (A x ) j and v ∈ arg min j ∈ σ ( x ) (A x ) j and let
+z
++ = e u and z
+− =
+x v
+1 − x v
+( x − e v ) + x ,
+where e u is a null vector except for the u th element being 1. The
+pure strategy selection function S Pure is defined as
+S Pure ( x ) =
+
+z + if ( z + − z −) 	 A x > 0
+z − if ( z + − z −) 	 A x < 0
+x otherwise .
+Since the search space for an infective strategy is reduced from
+ to a finite set, it is not obvious that S Pure ( x ) is a welldefined
+selection function, i.e. , it satisfies (10) . However, one can
+prove ( Rota Bulò & Bomze, 2011 ) thatthere exists an infective
+strategy for x if and only if S Pure ( x ) is infective for x .
+Another property that holds for Pure InImDyn, which is shared
+also by the replicator dynamics, is the characterization of ESS
+equilibria in terms of asymptotically stable points of the dynamics
+under symmetric payoff matrices.
+Theorem 8. A state x is asymptotically stable for InImDyn with S Pure
+as strategy selection function if and only if x is an ESS, provided that
+the payoff matrix is symmetric.
+Proof. See Rota Bulò and Bomze (2011) . 
+This selection function exhibits the nice property of rendering
+the complexity per iteration linear in both space and time,
+as opposed to the replicator dynamics, which have quadratic
+space/time complexity per iteration ( Rota Bulò, Pelillo, & Bomze,
+2011 ). We refer to Rota Bulò and Bomze (2011) and Rota Bulò et al.
+(2011) for further analyses of the theoretical and computational
+properties of InImDyn, among which convergence in finitely-many
+steps and support separation in finite-time. We also refer the
+interested reader to Ullrich (2016) for a recent development of a
+continuous-time version of InImDyn.
+3.3. Finding multiple clusters
+The Replicator and InImDyn dynamics that we presented in the
+previous sections allow to find upon convergence a single dominant
+set. In principle, one aims at enumerating all dominant sets for the
+clustering problem instance at hand, however, this is in general
+computationally intractable because there might be exponentially
+many clusters (see Section 2.5 ). In practice, having an incomplete,
+but good, coverage of dominant sets is typically sufficient for application
+purposes. In this section we review some computational
+strategies for the (partial) enumeration of dominant sets.
+Multi-start strategy. The first strategy is very naive and consists
+in re-starting the dynamics from different, random points in
+the simplex. This strategy is effective if the data consists of few
+clusters with large basins of attraction, such that the probability of
+sampling a point belonging to each basin is relatively high. Clearly,
+there is no guarantee that this procedure will not extract the same
+clusters multiple times. Hence, a post-processing step is devoted
+to identifying and prune repeated clusters. The multi-start strategy
+is optimal in the long-run, because it will eventually enumerate
+all dominant sets, but it might require a very large number of
+samples, thus being inefficient in practice.
+Peeling-off strategy. This strategy follows a different philosophy
+and finds application mainly in cases where one is not interested
+in finding overlapping clusters. The idea is again very simple and
+consists in iteratively extracting a dominant set and removing its
+vertices. By doing so, there is the obvious guarantee that no dominant
+set will be extracted multiple times. However, this strategy
+is not optimal because on one hand the number of dominant
+sets that can be potentially enumerated is upper-bounded by the
+total number of vertices; on the other hand, except for the first
+dominant set, all the following ones are not necessarily dominant
+sets of the original clustering problem instance, for every time
+vertices of a dominant set are peeled off, the underlying clustering
+problem instance changes. Despite the lack of optimality, the
+peeling-off strategy is computationally appealing and it has been
+used in practice in many applications.
+Destabilization strategy. This strategy has been proposed
+in Torsello et al. (2008) and Rota Bulò, Torsello, and Pelillo
+(2009) and it is based on the replicator dynamics. We will sketch
+the method in intuitive terms here, while we refer to the original
+paper for more details. The goal is to retain an optimal solution as
+in the multi-start strategy, but, at the same time, to avoid getting
+trapped by the same basins of attraction multiple times. The idea
+is to iteratively render the dominant sets that are extracted over
+time (and only those) unstable to the replicator dynamics, in order
+to prevent their extraction at the succeeding iterations. In order
+to destabilize a dominant set C , it is sufficient to add a new vertex
+to the original graph, connected in a way that the characteristic
+vector x C violates the ESS condition, while the set of non-extracted
+ESSs remains unchanged (see, Rota Bulò et al., 2009; Torsello et al.,
+2008 for details). Despite the theoretical validity of the approach,
+there are some practical issues with this method due to the possible
+emergence of periodic orbits that thwart the extraction of new
+dominant sets. Moreover, the computational complexity grows
+quadratically (assuming the number of RD iterations constant)
+with the number of extracted dominant sets.
+Tabu-list strategy. The last strategy has been proposed
+in Kontschieder, Rota Bulò, Donoser, Pelillo, and Bischof (2012) and
+it is based on the InImDyn dynamics. Again, we will simply sketch
+the general idea and we refer to the original paper for more
+details. The tabu-list strategy pursues the goal of an incomplete
+enumeration of dominant sets akin to the peeling-off strategy,
+yielding nevertheless a good coverage and without sacrificing the
+optimality of the solution, i.e. , it guarantees that the extracted
+clusters are dominant sets of the original clustering problem
+instance. The idea is to keep a tabu-list during the clustering
+process, i.e. , a list of vertices that should not be taken into account
+during the dominant set extraction. In some sense, this is what
+also the peeling-off strategy is doing, for all vertices of alreadyextracted
+dominant sets are added to the tabu-list. However, in
+order to prevent the possibility of extracting invalid dominant
+sets, the tabu-list strategy checks the validity of putative dominant
+sets found under the tabu-list constraint. In the specific, at each
+dominant set extraction iteration, a dominant set C ⊂V is found by
+running InImDyn with a random initialization under the constraint
+that no vertex in the tabu-list T ⊂V can be used, i.e. , C ⊆ V T . This
+constraint prevents C from being a valid dominant set in general,
+i.e. , C might not be a dominant set with respect to the full vertex
+set V . To examine the validity of the putative dominant set C , the
+InImDyn dynamics is run again, initialized to the characteristic
+vector x C and allowed to use all the vertices (including those in
+the tabu-list). Let C
+ ⊆ V be the dominant set found, which is
+valid, but might not be novel. There are then 2 possible scenarios,
+in which C
+ can be regarded as a new, valid dominant set to be
+added to the final clustering result: 1) C
+ ⊆ T , 2) C
+ ⊆ T , but C
+ was
+never found before. In the first case, the tabu-list is updated by
+adding any vertex in C
+ T ( e.g. , a random one), while in the second
+case the tabu-list is kept as it is. If, instead, it turns out that C
+
+⊆ T , but C
+ has already been found, we reject C
+ and add to the
+tabu-list any vertex in V T . The tabu-list strategy guarantees that
+either a valid and novel dominant set is extracted at each iteration,
+or the tabu-list is increased by one, thus limiting the number of
+iterations to max (| V |, # of clusters found). Note that one could also
+add more vertices at time to the tabu-list to speed-up the clustering
+process at the cost of eventually finding a smaller number of
+dominant sets, as is actually done in Kontschieder et al. (2012) .
+
+\end{document}
