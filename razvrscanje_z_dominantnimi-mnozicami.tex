@@ -4,7 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{marvosym}
 \usepackage{amssymb,amsmath}
-\title{Razvrščanje z dominantnimi množicami - povzetek}
+\title{Razvrščanje z dominantnimi množicami}
 \author{Taja Debeljak, Anže Marinko \\ Finančni praktikum \\ Finančna matematika, Fakulteta za matematiko in fiziko}
 \date{Jesen 2017}
 
@@ -54,7 +54,7 @@ Neprazni množici $C \subseteq V$ za katero je $W(T) > 0$ za vsako neprazno mno�
 max f(x) = x^T A x \\
 \text{p. p. } x\in\Delta \subset \mathbb{R}^n
 \end{gather}
-Kjer je $\Delta = \{x\in\mathbb{R}^n: \sum_{j\in V}x_j = 1 \text{ in } x_j \geq 0 \text{ za vsak } j\in V\}$ standardni simpleks iz $\mathbb{R}^n$.\\ \newline
+Kjer je $\Delta = \{x\in\mathbb{R}^n: \sum_{j\in V}x_j = 1 \text{ in } x_j \geq 0 \text{ za vsak } j\in V\}$ standardni simpleks iz $\mathbb{R}^n$.\\
 Pravimo, da je x rešitev zgornjega problema če obstaja soseščina x-a $U\subseteq \Delta$ za katero je $f(x) > f(z)$ za vsak $z \in U\setminus\{x\}$. Podpora $\sigma(x)$ za $x\in\Delta$ je definirana kot indeksna množica pozitivnih komponenta vektorja x, torej $\sigma(x) = \{i\in V : x_i>0\}$.
 
 \begin{definition}{Otežen vektor} \\
@@ -127,7 +127,45 @@ Poleg tega, če se omejimo na simetrične matrike izplačil, t.j., $A = A^T$, po
 \end{itemize}
 \end{theorem}
 Da bi lahko izvajali dinamiko replikatorja v času, lahko uporabimo neko iterativno metodo, npr.  metodo Runge-Kutta, za iskanje približka rešitev navadnih diferencialnih enačb. Druga možnost je, da lahko sprejmemo diskretno časovno podobo (6), ki je znana kot dinamika diskretnega replikatorja po času, ki jo dobimo z $x_i(t + 1) = x_i(t)\frac{(A x (t))_i}{x (t)^T A x (t)}$, za $i \in V$. Opazimo, da je dinamika diskretnega replikatorja po času enostavno-invariantna, če je A nenegativna. To pa ni omejitev, ker vsaka izplačila A ohranijo svoje ravnotežje s konstantnim premikom. Torej, če ima A negativne elemente, lahko skonstruiramo matriko $\bar{A} = A + \mu E$ s pozitivnimi elementi z ustrezno izbiro $\mu> 0$, kjer je E matrika s samimi enicami.\\
-Ker so ESS asimptotično stabilne v dinamiki replikatorjev po izrekih 3 in 4, lahko uporabimo to dinamiko za pridobivanje dominantnih množic, ki so v resnici v skladu z ESS, kot je bilo predhodno opisano. Poleg tega, če prevzamemo simetrične funkcije izplačil, spet opazimo povezavo s teorijo optimizacije, iz izhaja iz izreka 4, da dinamika replikatorjev lokalno maksimira $x^T Ax$. Končno, motivirana s povezavo s teorijo grafov, je bila dinamika replikatorjev uporabljena tudi za problem največje teže klika. \\
+Ker so ESS asimptotično stabilne v dinamiki replikatorjev po izrekih 3 in 4, lahko uporabimo to dinamiko za pridobivanje dominantnih množic, ki so v resnici v skladu z ESS, kot je bilo predhodno opisano. Poleg tega, če prevzamemo simetrične funkcije izplačil, spet opazimo povezavo s teorijo optimizacije, iz izhaja iz izreka 4, da dinamika replikatorjev lokalno maksimira $x^T Ax$. Končno, motivirana s povezavo s teorijo grafov, je bila dinamika replikatorjev uporabljena tudi za problem največje teže klika.
+\section{Dinamika okužb in imunizacije}
+Dinamika okužb in imunizacije je razred dinamike diskretnega časa, ki je bila uvedena, da bi premagali nekatere računalniške probleme s standardno evolucijsko dinamiko, ki vključujejo dinamiko replikatorjev. Naj omenimo nekaj problemov evolucijske dinamike kot dinamike replikatorjev: ima kvadratno kompleksnost prostora / časa na iteracijo, niso vse stacionarne točke Nasheva ravnovesja, konvergirajo le v limiti po številu iteracij in odkrivanje podpore ravnovesja je nerodno, če se dinamika ustavi pred pravilno konvergenco (tj. po končnem številu korakov).\\
+Dinamika okužb in imunizacije je naslednja:
+\begin{gather} x(t + 1) = \delta_{S(x)}(x)\lbrack S(x) - x\rbrack + x \end{gather},
+kjer smo zapisali x za x (t). Funkcija $S:\Delta\rightarrow\Delta$ je funkcija izbire strategije, ki izpolnjuje naslednje lastnosti:
+\begin{gather}
+S (x) = \begin{cases}
+y & \text{ za nek } y \in \Upsilon (x), \text{ če je } \Upsilon (x) \not= \emptyset, \\
+x & \text{sicer,} \end{cases} \end{gather}
+kjer $\Upsilon(x)$ predstavlja množico tako imenovanih infektivnih strategij za x in je definirana kot $\Upsilon(x) = \{y \in\Delta : (y - x)^T A x> 0\}$.\\
+Dokler obstaja $y \in\Upsilon (x)$, strategija x ne more biti ravnovesna po definiciji infektivne strategije. Če je temu tako, se dinamika (7) zmeša x in y (okuži x z y), dokler ne pride do kršitve Nashevih pogojev, ki ga povzroči y, kar se zgodi z upoštevanjem mešalnega faktorja $\delta y (x)$, ki je podan z
+\begin{gather}
+\delta y (x) =
+\begin{cases}
+min\{\frac{(x-y)^T A x}{(y-x)^T A (y-x)}, 1\} ,& \text{če} (y - x)^T A (y - x) <0,\\
+1, & \text{sicer.}
+\end{cases}
+\end{gather}
+Dinamika okužb in imunizacije prinaša fiksno točko, ko je $\Upsilon(x) = \emptyset$. Če je temu tako, je tudi x Nashevo ravnovesje:
+\begin{theorem}
+Naj bo $x \in\Delta$ strategija. Potem so naslednje izjave ekvivalentne: 
+\begin{enumerate}
+\item če $\Upsilon(x) = \emptyset$, za x ni infektivne strategije; 
+\item x je Nasheva strategija; 
+\item x je fiksna točka za dinamiko (7).
+\end{enumerate}
+\end{theorem}
+\textbf{Dokaz:} Omejimo se na dinamiko replikatorja. Če se omejimo na simetrične matrike izplačil, imamo povprečno izplačilo strogo naraščajoče vzdolž katere koli nekonstantne poti dinamike okužb in imunizacije: 
+\begin{theorem}
+Naj bo $\{x(t)\}_t \geq 0$ pot po (7). Torej za vse $t \geq 0$, $u (x (t + 1), x (t + 1)) \geq u (x (t), x (t))$ z enakostjo natanko tedaj, ko $x (t) = x (t + 1)$, pod pogojem, da je matrica izplačila simetrična.
+\end{theorem}
+\textbf{Dokaz:} Odvisno od izbire S(x) v (7) lahko dobimo drugačno dinamiko. V preostalem delu bomo pregledali še eno posebno, ki je preprosta in vodi do lepih lastnosti. Naj bo $u \in arg max_{j \in V} (A x)_j$ in $v \in arg min_{j \in\sigma (x)} (A x)_j$ in naj bo
+$$z^+ = e^u \text{ in } z^- = \frac{x_v}{1 - x_v} (x - e^v) + x, $$ kjer je $e^u$ ničelni vektor z u-tim elementom 1. Funkcija izbire čiste strategije izbirna $S_{\text{čista}}$ je definirana kot
+$$ S_{\text{čista}}(x) = \begin{cases}
+z^+ & \text{če} (z^+ - z^-)^T A x> 0\\
+z^- & \text{če} (z^+ - z^-)^T A x <0\\
+x & \text{sicer.}
+\end{cases}$$
 
 
 \end{document}
