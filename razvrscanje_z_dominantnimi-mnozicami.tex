@@ -126,6 +126,8 @@ Poleg tega, če se omejimo na simetrične matrike izplačil, t.j., $A = A^T$, po
 \item x je asimptotično stabilna natanko tedaj, ko je x ESS.
 \end{itemize}
 \end{theorem}
+Da bi lahko izvajali dinamiko replikatorja v času, lahko uporabimo neko iterativno metodo, npr.  metodo Runge-Kutta, za iskanje približka rešitev navadnih diferencialnih enačb. Druga možnost je, da lahko sprejmemo diskretno časovno podobo (6), ki je znana kot dinamika diskretnega replikatorja po času, ki jo dobimo z $x_i(t + 1) = x_i(t)\frac{(A x (t))_i}{x (t)^T A x (t)}$, za $i \in V$. Opazimo, da je dinamika diskretnega replikatorja po času enostavno-invariantna, če je A nenegativna. To pa ni omejitev, ker vsaka izplačila A ohranijo svoje ravnotežje s konstantnim premikom. Torej, če ima A negativne elemente, lahko skonstruiramo matriko $\bar{A} = A + \mu E$ s pozitivnimi elementi z ustrezno izbiro $\mu> 0$, kjer je E matrika s samimi enicami.\\
+Ker so ESS asimptotično stabilne v dinamiki replikatorjev po izrekih 3 in 4, lahko uporabimo to dinamiko za pridobivanje dominantnih množic, ki so v resnici v skladu z ESS, kot je bilo predhodno opisano. Poleg tega, če prevzamemo simetrične funkcije izplačil, spet opazimo povezavo s teorijo optimizacije, iz izhaja iz izreka 4, da dinamika replikatorjev lokalno maksimira $x^T Ax$. Končno, motivirana s povezavo s teorijo grafov, je bila dinamika replikatorjev uporabljena tudi za problem največje teže klika. \\
 
 
 \end{document}
