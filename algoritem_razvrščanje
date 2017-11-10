@@ -1,0 +1,6 @@
+def Y(x):
+    Gama = set()
+    for y in Delta:
+        if (y-x)^T *Ax>0:
+            gama.append(y)
+    return gama
