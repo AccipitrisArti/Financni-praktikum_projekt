@@ -12,3 +12,9 @@ def S(x):
         if len Y(x)!=0: 
             return y
     return x
+    
+def deltay(x,y):
+    for x in :
+        if (y - x)^T * A(y - x) < 0:
+            return min
+    return 1
