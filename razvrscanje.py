@@ -28,7 +28,8 @@ def Y(x, A = A, Delta = Delta):
     Gamma = []
     for y in Delta:
         y = np.array(y)
-        if sum(sum(np.transpose((y - x) * A) * (y - x))) > 0:
+        z = [x[i]-y[i] for i in range(len(x))]
+        if np.dot(np.dot(z, A), z) > 0:
            Gamma.append(y)
     return Gamma
 
