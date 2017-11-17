@@ -3,8 +3,8 @@
 import numpy as np
 import random
 
-w = [0.1, 0.8, 0.1]
-natancnost = 2
+w = w = [0.1, 0.8, 0.1, 0.4, 0.1, 0.9]
+natancnost = 1
 
 def Delta():
     koordinate = [random.randint(0,10**natancnost + 1) for i in range(len(w))]
