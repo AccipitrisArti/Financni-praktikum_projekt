@@ -1,9 +1,10 @@
 # Dinamika okuzb in imunizacije
 
 import numpy as np
+import random
 
-x = [0.95, 0.05]
-natancnost = 1
+x = [0.1, 0.5, 0.4]
+natancnost = 2
 interval_0_1 = [i / 10**natancnost for i in range(10**natancnost + 1)]
 
 Delta = []
@@ -20,7 +21,8 @@ for tocka in range(10**natancnost,(10**natancnost + 1)**len(x) + 1):
 A = [[0 for i in range(len(x))] for j in range(len(x))]
 for i in range(len(x)):
     for j in range(len(x)):
-        A[i][j] = abs(x[i] - x[j])
+        A[i][j] = (abs(x[i] - x[j]))**(1/2)
+# hitrost konvergence in limita odvisna od definicije a_{i,j}
 
 def Y(x, A = A, Delta = Delta):
     x = np.array(x)
@@ -28,30 +30,30 @@ def Y(x, A = A, Delta = Delta):
     Gamma = []
     for y in Delta:
         y = np.array(y)
-        z = [x[i]-y[i] for i in range(len(x))]
-        if np.dot(np.dot(z, A), z) > 0:
+        z = [y[i]-x[i] for i in range(len(x))]
+        if np.dot(np.dot(z, A), x) > 0:
            Gamma.append(y)
     return Gamma
 
 def S(x):
     y = Y(x)
     if len(y) != 0:
-        return y
+        return y[random.randint(0,len(Y(x))-1)]
     return x
 
 def delta(y,x,A=A):
-    x = np.array(x)
-    y = np.array(y)
     A = np.array(A)
-    mx = np.dot(np.dot((y - x), A), x)
-    my = np.dot(np.dot((y - x), A), y)
+    z = [y[i]-x[i] for i in range(len(x))]
+    mx = np.dot(np.dot(z, A), x)
+    my = np.dot(np.dot(z, A), y)
     if my-mx < 0:
         return min(-mx/(my-mx),1)
     return 1
 
 pop = x
-for t in range(10):
+for t in range(300):
     s = np.array(S(pop))
     pop = np.array(pop)
-    pop = delta(s,pop) * (s-pop) + pop
-    print(pop)
+    pop += delta(s,pop) * (s-pop)
+    if t%30 == 0:
+        print(pop)
