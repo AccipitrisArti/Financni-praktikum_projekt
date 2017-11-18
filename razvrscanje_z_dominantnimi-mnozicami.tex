@@ -88,16 +88,18 @@ Naj bo graf G neusmerjen z matriko sosednosti $A_G$ in naj bo $0 < \alpha < 1$. 
 Teorija iger (za razliko od teorije optimizacije) lahko obravnava tudi nesimetrične matrike. Ideja je v zasnovi simetrične igre »clustering game« med dvema igralcema. Podatkovne točke V (akcije V?) so čiste strategije, ki so na voljo igralcem, matrika A pa predstavlja njihova plačila. Oba igralca imata popolno znanje o poteku igre in sprejemata neodvisne odločitve o tem katero strategijo bosta izbrala. Matrika izplačil predstavlja prihodke, ki jih dobi igralec če se igra določena strategija. Torej če igralec 1 in 2 igrata strategijo $(i,j)\in V\times V$ potem igralec 1 dobi izplačilo $A_{i,j}$, igralec 2 pa $A_{j,i}$.
 Mešana strategija $x\in\Delta$ je verjetnost porazdelitve čistih strategij, ki modelira stohastično strategijo igre nekega igralca. Če igralec 1 in 2 igrata mešani strategiji $(x_1,x_2)\in\Delta\times\Delta$  potem sta pričakovani izplačili igralcev $x_1^TAx_2$ in $x_2^TAx_1$.
 Nashevo ravnovesje je profil mešane strategije $(x_1,x_2)\in V\times V$ pri katerem se noben od igralcev ne more povečati svojega izplačila ob nespremenjeni igri drugih igralcev, torej 
-$$y_1^TAx_2\leq x_1^TAx_2 \text{in} y_2^TAx_1\leq x_2^TAx_1$$
+$$y_1^TAx_2\leq x_1^TAx_2 \text{ in } y_2^TAx_1\leq x_2^TAx_1$$
 Za vse $(y_1,y_2)\in\Delta\times\Delta$. Nashevo ravnovesje je simetrično če velja $x_1=x_2$. v primeru simetričnega Nashevega ravnovesja se prejšni neenakosti združita v
-$$y^TAx\leq x^TAx \text{za vse} y\in\Delta$$.
+$$y^TAx\leq x^TAx \text{ za vse } y\in\Delta$$.
 Z vidika clustering game je simetrično ravnovesje tisto kjer imata oba igralca enake hipoteze o članstvu v gruči in noben od igralcev ne želi iz grupe. Še več, prejšni pogoj pomeni:
-%{(𝐴𝑥)𝑖=𝑥𝑇𝐴𝑥;𝑖∈𝜎(𝑥)(𝐴𝑥)𝑖≤𝑥𝑇𝐴𝑥; 𝑖∉𝜎(𝑥)
-%Ki pa ga lahko interpretiramo kot notranjo homogenost gruče predstavljeno z podporo 𝜎(𝑥) od x-a, za pričakovano podobnost katerega koli elementa iz gruče z nekim drugim elementom bo enaka.
-%Vendar pa Nash ne nujno zagotavlja pogoj maksimuma, kar lahko vseeno zagotovimo z izboljšanjem Nashevega ravnovesja poznan kot evolucijsko stabilna strategija (ESS). Simetrično Nashevo ravnovesje 𝑥∈Δ je evolucijsko stabilna metoda če poleg pogoja 𝑦𝑇𝐴𝑥≤𝑥𝑇𝐴𝑥 za vse 𝑦∈Δ
-%zadostuje tudi pogoju 𝑦𝑇𝐴𝑥=𝑥𝑇𝐴𝑥 ⇒ 𝑥𝑇𝐴𝑦<𝑥𝑇𝐴𝑥 za vse 𝑦∈Δ\x
-%Izrek3
-%Naj bo A matrika podobnosti pri primeru problema združevanja in naj bo Γ clustering game. Če je C dominantna množica v A, potem je vektor 𝑥𝐶 ESS od Γ. Obratno, če je vektor x ESS od Γ, potem je 𝐶=𝜎(𝑥) dominantna množica od A, če (𝐴𝑥)𝑖≠𝑥𝑇𝐴𝑥 𝑧𝑎 𝑣𝑠𝑒 𝑖 ∉𝐶.
+$$\begin{cases}
+(Ax)_i=x^TAx; & i\in\sigma(x) \\ (Ax)_i\leq x^TAx; & i\not\in\sigma(x)
+\end{cases}$$
+Ki pa ga lahko interpretiramo kot notranjo homogenost gruče predstavljeno z podporo $\sigma(x)$ od x-a, za pričakovano podobnost katerega koli elementa iz gruče z nekim drugim elementom bo enaka.
+Vendar pa Nash ne nujno zagotavlja pogoj maksimuma, kar lahko vseeno zagotovimo z izboljšanjem Nashevega ravnovesja poznan kot evolucijsko stabilna strategija (ESS). Simetrično Nashevo ravnovesje $x\in\Delta$ je evolucijsko stabilna metoda če poleg pogoja $y^TAx\leq x^TAx \text{ za vse } y\in\Delta$ zadostuje tudi pogoju $y^TAx= x^TAx \Rightarrow x^TAx<x^TAx \text{ za vse } y\in\Delta\setminus x$.
+\begin{theorem}
+Naj bo A matrika podobnosti pri primeru problema združevanja in naj bo $\Gamma$ clustering game. Če je C dominantna množica v A, potem je vektor $x^C$ ESS od $\Gamma$. Obratno, če je vektor x ESS od $\Gamma$, potem je $C=\sigma(x)$ dominantna množica od A, če $(Ax)_i\not=x^TAx \text{ za vse } i \not\in C$.
+\end{theorem}
 
 \section{Razvrščanje z uporabo dmoinantnih množic}
 Naivna strategijabi lahko bilo oštevilčenje vseh podmnožic $C\subseteq V$ preverjanje pogojev iz Definicije 1. Ta rešitev je očitno precej neučinkovita, zato si bomo ogledali dve alternativni strategiji. Obe rešitvi izvirata iz teorije iger.
