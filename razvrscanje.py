@@ -3,55 +3,80 @@
 import numpy as np
 import random
 
-w = w = [0.1, 0.8, 0.1, 0.4, 0.1, 0.9]
+# nastavitve
 natancnost = 1
+st_iteracij, korak = 300, 10
 
-def Delta():
-    koordinate = [random.randint(0,10**natancnost + 1) for i in range(len(w))]
+# vhodni podatki
+w1 = [0.1, 0.1, 0.1, 0.3, 0.4]
+
+
+def delta(w, nat):
+    koordinate = [random.randint(0, 10**nat + 1) for _ in range(len(w))]
     vsota = sum(koordinate)
     if vsota != 0:
         for k in range(len(koordinate)):
             koordinate[k] *= 1/vsota
     else:
-        return [0,0,0]
-    return koordinate
-# Delta je simpleks (sum_{i=1:n}x_i=1, x_i>=0 za i=1:n)
+        return np.array([0, 0, 0])
+    return np.array(koordinate)
+# delta je simpleks (sum_{i=1:n}x_i=1, x_i>=0 za i=1:n)
 
-A = [[0 for i in range(len(w))] for j in range(len(w))]
-for i in range(len(w)):
-    for j in range(len(w)):
-        A[i][j] = (abs(w[i] - w[j]))**(1/2)
-# hitrost konvergence in limita odvisna od definicije a_{i,j}
 
-def Y(x, A = A):
+def gamma(x, matrika, nat):
     x = np.array(x)
-    A = np.array(A)
-    Gamma = []
-    while len(Gamma) == 0:
-        y = Delta()
-        z = [y[i]-x[i] for i in range(len(x))]
-        if np.dot(np.dot(z, A), x) > 0:
-           Gamma.append(y)
-    return Gamma
+    matrika = np.array(matrika)
+    for _ in range(1000):
+        y = np.array(delta(x, nat))
+        if len(x) == len(y):
+            z = np.array([y[i]-x[i] for i in range(len(x))])
+            if np.dot(np.dot(z, matrika), x) > 0:
+                return y
+    return None
 
-def S(x):
-    y = Y(x)
-    if len(y) != 0:
-        return y[random.randint(0,len(Y(x))-1)]
-    return x
 
-def delta(y,x,A=A):
-    A = np.array(A)
-    z = [y[i]-x[i] for i in range(len(x))]
-    mx = np.dot(np.dot(z, A), x)
-    my = np.dot(np.dot(z, A), y)
-    if my-mx < 0:
-        return min(-mx/(my-mx),1)
+def s(x, matrika, nat):
+    y = gamma(x, matrika, nat)
+    if y is None:
+        return x
+    return y
+
+
+def konst_del(y, x, matrika):
+    matrika = np.array(matrika)
+    x = np.array(x)
+    y = np.array(y)
+    z = np.array([y[i]-x[i] for i in range(len(x))])
+    mx = np.dot(np.dot(z, matrika), x)
+    my = np.dot(np.dot(z, matrika), y)
+    konstanta = -mx / (my - mx)
+    if my-mx < 0 and konstanta < 1:
+        return konstanta
     return 1
 
-pop = w
-for t in range(300):
-    s = np.array(S(pop))
-    pop = np.array(pop)
-    pop += delta(s,pop) * (s-pop)
-    print(pop)
+
+def iteracija(x=w1, n=st_iteracij, nat=natancnost, k=korak):
+    w = [x[i] / sum(x) for i in range(len(x))]
+
+    matrika = [[0 for _ in range(len(w))] for _ in range(len(w))]
+    for i in range(len(w)):
+        for j in range(len(w)):
+            matrika[i][j] = abs(w[i] - w[j])
+    # hitrost konvergence in limita odvisna od definicije matrike A_{i,j}
+    print(matrika)
+
+    matrika = np.array(matrika)
+    w = np.array(w)
+    pop = w
+    print('x( t={} ) = {}'.format(0, pop))
+    for t in range(1, n+1):
+        strategija = np.array(s(pop, matrika, nat))
+        pop = np.array(pop)
+        konstanta = konst_del(strategija, pop, matrika)
+        pop = konstanta * (strategija-pop) + pop
+        if t % k == 0:
+            print('x( t={} ) = {}'.format(t, pop))
+    return [w, pop]
+
+
+iteracija(w1)
