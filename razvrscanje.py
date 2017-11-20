@@ -42,8 +42,10 @@ def konst_del(y, x, matrika):
     z = np.array([y[i]-x[i] for i in range(len(x))])
     mx = np.dot(np.dot(z, matrika), x)
     my = np.dot(np.dot(z, matrika), y)
+    if -1e-16 < my - mx:    # abs(my - mx) < 1e-16 and my - mx > 0
+        return 1
     konstanta = - mx / (my - mx)
-    if my-mx < 0 and konstanta < 1:
+    if konstanta < 1:
         return konstanta
     return 1
 
@@ -56,11 +58,12 @@ def iteracija(x, n, nat):
         for j in range(len(w)):
             matrika[i][j] = abs(w[i] - w[j])
     # hitrost konvergence in limita odvisna od definicije matrike A_{i,j}
+    # A je matrika izplacil (koristnosti)
 
     matrika = np.array(matrika)
     w = np.array(w)
     pop = w
-    for t in range(1, n+1):
+    for _ in range(1, n+1):
         strategija = np.array(s(pop, matrika, nat))
         pop = np.array(pop)
         konstanta = konst_del(strategija, pop, matrika)
@@ -81,5 +84,19 @@ def simulacija(st_iteracij=10, nat=1, st_komponent=3, t_max=100):
         iteracija(koordinate1, n=t_max, nat=nat)
 
 
-st = input('Število komponent x-a: ')
-simulacija(st_komponent=int(st))
+vklop = True
+while vklop:
+    it = input('Stevilo zacetnih x-ov (privzeto: 1): ')
+    if it == '':
+        it = 1
+    st = input('Stevilo komponent x-a (privzeto: 3): ')
+    if st == '':
+        st = 3
+    cas = input('Stevilo iteracij (maksimalen cas, privzeto: 100): ')
+    if cas == '':
+        cas = 100
+    print(' ')
+    simulacija(int(it), 1, int(st), int(cas))
+    nadaljuj = input("\nNadaljuj ([1]='DA' (privzeto) ali [0]='NE')? ")
+    if nadaljuj in {'0'}:
+        vklop = False
