@@ -81,5 +81,5 @@ def simulacija(st_iteracij=10, nat=1, st_komponent=3, t_max=100):
         iteracija(koordinate1, n=t_max, nat=nat)
 
 
-st = input('Število komponent x-a:')
+st = input('Število komponent x-a: ')
 simulacija(st_komponent=int(st))
