@@ -2,10 +2,12 @@
 
 import numpy as np     # knjiznica za numericno ucinkovito racunanje
 import random
+import turtle
 
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas)
-it1, st1, cas1 = 5, 4, 200
+it1, st1, cas1 = 3, 4, 50
+barve = ['blue', 'green', 'yellow', 'orange', 'red']
 
 
 def delta(w, nat):     # simpleks {x; sum_{i=1:n}x_i=1, x_i>=0 za i=1:n}
@@ -54,14 +56,16 @@ def konst_del(y, x, matrika):     # izracun konstante \delta_y(x)
 
 
 def iteracija(x, n, nat):    # izracun strategije ob casu n, ob konstantni matriki koristnosti
-    w = [x[i] / sum(x) for i in range(len(x))]
+    w = [x[i] for i in range(len(x))]
+    if sum(x) != 0:
+        w = [x[i] / sum(x) for i in range(len(x))]
 
     matrika = [[0 for _ in range(len(w))] for _ in range(len(w))]
     for i in range(len(w)):
         for j in range(len(w)):
-            matrika[i][j] = abs(w[i] - w[j])
-    # hitrost konvergence in limita odvisna od definicije matrike A_{i,j}
-    # A je matrika izplacil (koristnosti) generirana kot A_{i,j} = abs(x_i(0) - x_j(0))
+            if w[i] != w[j]:
+                matrika[i][j] = 1/abs(w[i] - w[j])
+    # A je matrika podobnosti
 
     matrika = np.array(matrika)
     w = np.array(w)
@@ -75,33 +79,21 @@ def iteracija(x, n, nat):    # izracun strategije ob casu n, ob konstantni matri
     return [w, pop]
 
 
-# =========================(odstrani)
-def iteracija2(x, n, nat):    # izracun strategije ob casu n, ob matriki koristnosti odvisni od casa
-    w = [x[i] / sum(x) for i in range(len(x))]
-    w = np.array(w)
-    pop = w
-    for _ in range(1, n+1):
-        matrika = [[0 for _ in range(len(pop))] for _ in range(len(pop))]
-        for i in range(len(pop)):
-            for j in range(len(pop)):
-                matrika[i][j] = abs(pop[i] - pop[j])
-        # hitrost konvergence in limita odvisna od definicije matrike A_{i,j}
-        # A je matrika izplacil (koristnosti) generirana kot A_{i,j} = abs(x_i(t) - x_j(t))
-        matrika = np.array(matrika)
-        strategija = np.array(s(pop, matrika, nat))
-        pop = np.array(pop)
-        konstanta = konst_del(strategija, pop, matrika)
-        pop = konstanta * (strategija-pop) + pop
-    print('x( t={} ) = {}\nx( t={} ) = {}'.format(0, w, n, pop))
-    return [w, pop]
-# =========================
+def narisi(zelva, koordinate1, gruce, poizkus):
+    for k in range(len(koordinate1)):
+        zelva.goto(koordinate1[k]*200*len(gruce)-250, poizkus*10)
+        zelva.pen(pencolor=barve[gruce[k]-1], pensize=10)
+        zelva.pendown()
+        zelva.goto(koordinate1[k]*200*len(gruce)-250+1, poizkus*10)
+        zelva.penup()
 
 
-# =========================(spremeni)
-def simulacija(st_iteracij=10, nat=1, st_komponent=3, t_max=100, ite=0):
-    # =========================
+def simulacija(st_iteracij=10, nat=3, st_komponent=3, t_max=100, zel=False):
     #   iteracija nakljucno generiranih zacetnih strategij
-    for _ in range(st_iteracij):
+    if zel:
+        zelva = turtle.Turtle()
+        zelva.penup()
+    for poizkus in range(st_iteracij):
         vsota1 = 0
         koordinate1 = [0 for _ in range(st_komponent)]
         while vsota1 == 0:
@@ -109,13 +101,26 @@ def simulacija(st_iteracij=10, nat=1, st_komponent=3, t_max=100, ite=0):
             vsota1 = sum(koordinate1)
         for p in range(len(koordinate1)):
             koordinate1[p] *= 1/vsota1
-        # =========================(spremeni)
-        if ite == 0:
-            iteracija(koordinate1, n=t_max, nat=nat)
-        else:
-            iteracija2(koordinate1, n=t_max, nat=nat)
-        # =========================
-
+        kor = koordinate1
+        gruca = 0
+        gruce = [0 for _ in range(len(kor))]
+        while len(kor) > 0:
+            itr = iteracija(kor, n=t_max, nat=nat)
+            gruca += 1
+            komp = 0
+            for i in range(len(koordinate1)):
+                if gruce[i] == 0:
+                    if itr[1][komp] > 10**(-20/len(kor))/len(kor):
+                        gruce[i] = gruca
+                    komp += 1
+            kor = []
+            for i in range(len(gruce)):
+                if gruce[i] == 0:
+                    kor.append(koordinate1[i])
+        print(gruce)
+        if zel:
+            narisi(zelva, koordinate1, gruce, poizkus)
+                
 
 #    uporabniku prijazen program
 vklop = True
@@ -129,18 +134,15 @@ while vklop:
     cas = input('Stevilo iteracij (maksimalen cas, privzeto: {}): '.format(cas1))
     if cas == '':
         cas = cas1
-    # =========================(odstrani)
-    itr = input('Nacin iteracije ([1] = A odvisen od t, [(drugo)] = A konstanten (privzeto))\n'
-                '[torej A_{i,j} = abs(x_i - x_j) v odvisnosti od casa ali ne]: ')
-    if itr != '1':
-        itr = 0
-    # =========================
-    # =========================(spremeni)
-    print('\nSimulacija(st_zacetkov = {}, st_akcij = {}, Max_cas = {}, nacin_iteracije = {})\n'.format(
-        it, st, cas, itr
+    zel = input('zelva ([1] = DA): ')
+    if zel == '1':
+        zel = True
+    else:
+        zel = False
+    print('\nSimulacija(st_zacetkov = {}, st_akcij = {}, Max_cas = {}, zelva = {})\n'.format(
+        it, st, cas, zel
     ))
-    simulacija(int(it), 1, int(st), int(cas), itr)
-    # =========================
+    simulacija(int(it), 1, int(st), int(cas), zel)
     nadaljuj = input("\nNadaljuj ([1]='DA' (privzeto) ali [0]='NE')? ")
     if nadaljuj in {'0'}:
         vklop = False
