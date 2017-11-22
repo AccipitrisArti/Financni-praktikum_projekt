@@ -6,7 +6,7 @@ import turtle
 
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas)
-it1, st1, cas1 = 3, 4, 50
+it1, st1, cas1 = 10, 8, 50
 barve = ['blue', 'green', 'yellow', 'orange', 'red']
 
 
@@ -81,10 +81,10 @@ def iteracija(x, n, nat):    # izracun strategije ob casu n, ob konstantni matri
 
 def narisi(zelva, koordinate1, gruce, poizkus):
     for k in range(len(koordinate1)):
-        zelva.goto(koordinate1[k]*200*len(gruce)-250, poizkus*10)
+        zelva.goto(koordinate1[k]*200*len(gruce)-250, poizkus*10-250)
         zelva.pen(pencolor=barve[gruce[k]-1], pensize=10)
         zelva.pendown()
-        zelva.goto(koordinate1[k]*200*len(gruce)-250+1, poizkus*10)
+        zelva.goto(koordinate1[k]*200*len(gruce)-250+1, poizkus*10-250)
         zelva.penup()
 
 
@@ -134,11 +134,11 @@ while vklop:
     cas = input('Stevilo iteracij (maksimalen cas, privzeto: {}): '.format(cas1))
     if cas == '':
         cas = cas1
-    zel = input('zelva ([1] = DA): ')
-    if zel == '1':
-        zel = True
-    else:
+    zel = input('\n[0] = NE\n(privzeto) = DA\nNarisi z zelvico: ')
+    if zel == '0':
         zel = False
+    else:
+        zel = True
     print('\nSimulacija(st_zacetkov = {}, st_akcij = {}, Max_cas = {}, zelva = {})\n'.format(
         it, st, cas, zel
     ))
