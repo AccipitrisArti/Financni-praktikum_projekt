@@ -1,11 +1,12 @@
 # Dinamika okuzb in imunizacije
+# Taja Debeljak in Anze Marinko, financna matematika, financni praktikum
 
 import numpy as np  # knjiznica za numericno ucinkovito racunanje
 import random
 import turtle
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas, natancnost)
-it1, st1, cas1, nat1 = 15, 20, 200, 16
+it1, st1, cas1, nat1 = 15, 20, 100, 14
 barve1 = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5),
           (1, 0.5, 0), (1, 0, 0.5), (0.5, 1, 0), (0, 1, 0.5), (0.5, 0, 1), (0, 0.5, 1)]
 barve0 = [(1-1/(m**2+1), 1/(m+1), 0) for m in range(20)]
