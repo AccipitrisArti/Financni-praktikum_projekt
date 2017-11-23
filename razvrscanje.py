@@ -5,7 +5,7 @@ import random
 import turtle
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas, natancnost)
-it1, st1, cas1, nat1 = 15, 20, 100, 15
+it1, st1, cas1, nat1 = 15, 20, 200, 16
 barve1 = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5),
           (1, 0.5, 0), (1, 0, 0.5), (0.5, 1, 0), (0, 1, 0.5), (0.5, 0, 1), (0, 0.5, 1)]
 barve0 = [(1-1/(m**2+1), 1/(m+1), 0) for m in range(20)]
@@ -89,17 +89,17 @@ def iteracija(x, n, ponovitev=1):  # izracun strategije ob casu n, ob konstantni
 
 def narisi(zelva, koordinate1, gruce, poizkus, st_iteracij, barve=barve0):
     maxx = max(koordinate1)
-    if max(gruce) <= 4:
+    if max(gruce) <= len(barve):
         barve = barve1
     for k in range(len(koordinate1)):
-        zelva.goto(koordinate1[k] * 500 / maxx - 250, poizkus * 500 / (st_iteracij - 1) - 250)
+        zelva.goto(koordinate1[k] * 500 / maxx - 250, -poizkus * 500 / (st_iteracij - 1) + 250)
         zelva.pen(pensize=10)
         if gruce[k] > len(barve):
             zelva.pencolor('grey')
         else:
             zelva.pencolor(barve[gruce[k] - 1])
         zelva.pendown()
-        zelva.goto(koordinate1[k] * 500 / maxx - 250 + 1, poizkus * 500 / (st_iteracij - 1) - 250)
+        zelva.goto(koordinate1[k] * 500 / maxx - 250 + 1, -poizkus * 500 / (st_iteracij - 1) + 250)
         zelva.penup()
     zelva.goto(-1000, -1000)
 
@@ -126,6 +126,9 @@ def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False, natancnost
     #   iteracija nakljucno generiranih zacetnih strategij
     if zel1:
         zelva = turtle.Turtle()
+        zelva.clear()
+        zelva.hideturtle()
+        zelva.speed(0)
         zelva.penup()
         koordinatni_sistem(zelva, st_iteracij)
     for poizkus in range(st_iteracij):
@@ -139,7 +142,7 @@ def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False, natancnost
             komp = 0
             for i in range(len(koordinate1)):
                 if gruce[i] == 0:
-                    if itr[1][komp] > 10 ** (-(20-natancnost) / len(kor)) / len(kor):
+                    if itr[1][komp] > 10 ** (-(20-natancnost) / len(kor)) * max(itr[1]):
                         gruce[i] = gruca
                     komp += 1
             kor = []
@@ -176,7 +179,7 @@ while vklop:
         nat = nat1
     else:
         nat = int(nat)
-    print('\nSimulacija(st_zacetkov = {}, st_akcij = {}, Max_cas = {}, zelva = {})\n'.format(
+    print('\nSimulacija(st_zacetkov = {}, st_akcij = {}, max_cas = {}, zelva = {})\n'.format(
         it, st, cas, zel
     ))
     simulacija(int(it), int(st), int(cas), zel, natancnost=nat)
