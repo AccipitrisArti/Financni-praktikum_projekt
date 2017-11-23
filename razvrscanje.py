@@ -5,10 +5,9 @@ import random
 import turtle
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas, natancnost)
-it1, st1, cas1, nat1 = 15, 20, 100, 18
-barve1 = ['blue', 'green', 'red', 'orange', 'yellow', 'grey', 'brown']
-barve = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 0, 1), (0, 1, 1), (1, 1, 0),
-         (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5), (0.5, 0.5, 0.5)]
+it1, st1, cas1, nat1 = 15, 20, 100, 15
+barve = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5),
+         (1, 0.5, 0), (1, 0, 0.5), (0.5, 1, 0), (0, 1, 0.5), (0.5, 0, 1), (0, 0.5, 1)]
 
 
 def element_simpleksa(dolzina):
@@ -62,7 +61,7 @@ def konst_del(y, x, matrika):  # izracun konstante \delta_y(x)
     return 1
 
 
-def iteracija(x, n):  # izracun strategije ob casu n, ob konstantni matriki koristnosti
+def iteracija(x, n, ponovitev=1):  # izracun strategije ob casu n, ob konstantni matriki koristnosti
     w = [x[i] for i in range(len(x))]
     if sum(x) != 0:
         w = [x[i] / sum(x) for i in range(len(x))]
@@ -82,18 +81,24 @@ def iteracija(x, n):  # izracun strategije ob casu n, ob konstantni matriki kori
         pop = np.array(pop)
         konstanta = konst_del(strategija, pop, matrika)
         pop = konstanta * (strategija - pop) + pop
-    print('x( t={} ) = {}\nx( t={} ) = {}'.format(0, w, n, pop))
+    if ponovitev == 1:
+        print('x( t={} ) = {}\nx( t={} ) = {}'.format(0, w, n, pop))
     return [w, pop]
 
 
 def narisi(zelva, koordinate1, gruce, poizkus, st_iteracij):
+    maxx = max(koordinate1)
     for k in range(len(koordinate1)):
-        zelva.goto(koordinate1[k] * 500 - 250, poizkus * 500 / (st_iteracij - 1) - 250)
+        zelva.goto(koordinate1[k] * 500 / maxx - 250, poizkus * 500 / (st_iteracij - 1) - 250)
         zelva.pen(pensize=10)
-        zelva.pencolor(barve[gruce[k] - 1])
+        if gruce[k] > len(barve):
+            zelva.pencolor('grey')
+        else:
+            zelva.pencolor(barve[gruce[k] - 1])
         zelva.pendown()
-        zelva.goto(koordinate1[k] * 500 - 250 + 1, poizkus * 500 / (st_iteracij - 1) - 250)
+        zelva.goto(koordinate1[k] * 500 / maxx - 250 + 1, poizkus * 500 / (st_iteracij - 1) - 250)
         zelva.penup()
+    zelva.goto(-1000, -1000)
 
 
 def koordinatni_sistem(zelva, st_iteracij):
@@ -101,15 +106,15 @@ def koordinatni_sistem(zelva, st_iteracij):
     zelva.pendown()
     zelva.goto(-250, 250)
     zelva.penup()
-    zelva.goto(251, 250)
+    zelva.goto(261, 250)
     zelva.pendown()
-    zelva.goto(251, -250)
+    zelva.goto(261, -250)
     zelva.penup()
     zelva.pen(pencolor='grey')
-    for i in range(st_iteracij+1):
-        zelva.goto(-250,  i * 500 / (st_iteracij - 1) - 250)
+    for i in range(st_iteracij):
+        zelva.goto(-250, - i * 500 / (st_iteracij - 1) + 250)
         zelva.pendown()
-        zelva.goto(251,  i * 500 / (st_iteracij - 1) - 250)
+        zelva.goto(261, - i * 500 / (st_iteracij - 1) + 250)
         zelva.penup()
 
 
@@ -125,8 +130,8 @@ def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False, natancnost
         gruca = 0
         gruce = [0 for _ in range(len(kor))]
         while len(kor) > 0:
-            itr = iteracija(kor, n=t_max)
             gruca += 1
+            itr = iteracija(kor, n=t_max, ponovitev=gruca)
             komp = 0
             for i in range(len(koordinate1)):
                 if gruce[i] == 0:
