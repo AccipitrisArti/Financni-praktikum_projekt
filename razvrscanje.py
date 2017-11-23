@@ -5,26 +5,32 @@ import random
 import turtle
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas)
-it1, st1, cas1 = 10, 20, 50
-barve = ['blue', 'green', 'yellow', 'orange', 'red']
+it1, st1, cas1 = 10, 20, 100
+barve = ['blue', 'green', 'yellow', 'orange', 'red', 'grey', 'brown']
 
 
-def delta(w, nat):  # simpleks {x; sum_{i=1:n}x_i=1, x_i>=0 za i=1:n}
-    vsota = 0
-    koordinate = [0 for _ in range(len(w))]
-    while vsota == 0:
-        koordinate = [random.randint(0, 10 ** nat + 1) for _ in range(len(w))]
-        vsota = sum(koordinate)
-    for k in range(len(koordinate)):
-        koordinate[k] *= 1 / vsota
+def element_simpleksa(dolzina):
+    vek = [0 for _ in range(dolzina+1)]
+    for j in range(1, dolzina):
+        vek[j] = random.uniform(0, 1)
+    vek[dolzina] = 1
+    vek.sort()
+    vek1 = [0 for _ in range(dolzina)]
+    for j in range(dolzina):
+        vek1[j] = vek[j] - vek[j-1]
+    return vek1
+
+
+def delta(w):  # simpleks {x; sum_{i=1:n}x_i=1, x_i>=0 za i=1:n}
+    koordinate = element_simpleksa(len(w))
     return np.array(koordinate)
 
 
-def gamma(x, matrika, nat):  # iskanje elementa y\in\Delta, ki zadosca pogoju (y-x)^T*A*x > 0
+def gamma(x, matrika):  # iskanje elementa y\in\Delta, ki zadosca pogoju (y-x)^T*A*x > 0
     x = np.array(x)
     matrika = np.array(matrika)
     for _ in range(10000):
-        y = np.array(delta(x, nat))
+        y = np.array(delta(x))
         if len(x) == len(y):
             z = np.array([y[i] - x[i] for i in range(len(x))])
             if np.dot(np.dot(z, matrika), x) > 0:
@@ -32,8 +38,8 @@ def gamma(x, matrika, nat):  # iskanje elementa y\in\Delta, ki zadosca pogoju (y
     return None
 
 
-def s(x, matrika, nat):  # izbira strategije y
-    y = gamma(x, matrika, nat)
+def s(x, matrika):  # izbira strategije y
+    y = gamma(x, matrika)
     if y is None:
         return x
     return y
@@ -54,7 +60,7 @@ def konst_del(y, x, matrika):  # izracun konstante \delta_y(x)
     return 1
 
 
-def iteracija(x, n, nat):  # izracun strategije ob casu n, ob konstantni matriki koristnosti
+def iteracija(x, n):  # izracun strategije ob casu n, ob konstantni matriki koristnosti
     w = [x[i] for i in range(len(x))]
     if sum(x) != 0:
         w = [x[i] / sum(x) for i in range(len(x))]
@@ -70,7 +76,7 @@ def iteracija(x, n, nat):  # izracun strategije ob casu n, ob konstantni matriki
     w = np.array(w)
     pop = w
     for _ in range(1, n + 1):
-        strategija = np.array(s(pop, matrika, nat))
+        strategija = np.array(s(pop, matrika))
         pop = np.array(pop)
         konstanta = konst_del(strategija, pop, matrika)
         pop = konstanta * (strategija - pop) + pop
@@ -104,26 +110,19 @@ def koordinatni_sistem(zelva, st_iteracij):
         zelva.penup()
 
 
-def simulacija(st_iteracij=10, nat=3, st_komponent=3, t_max=100, zel1=False):
+def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False):
     #   iteracija nakljucno generiranih zacetnih strategij
     if zel1:
         zelva = turtle.Turtle()
         zelva.penup()
         koordinatni_sistem(zelva, st_iteracij)
     for poizkus in range(st_iteracij):
-        koordinate1 = [0 for _ in range(st_komponent)]
-        vsota1 = random.randint(10 ** nat, (10 ** nat + 1) ** st_komponent + 1)
-        for i in range(st_komponent):
-            koordinate1[i] = vsota1 % (10 ** nat + 1)
-            vsota1 = vsota1 // (10 ** nat + 1)
-        vsota = sum(koordinate1)
-        for p in range(len(koordinate1)):
-            koordinate1[p] *= 1 / vsota
+        koordinate1 = element_simpleksa(st_komponent)
         kor = koordinate1
         gruca = 0
         gruce = [0 for _ in range(len(kor))]
         while len(kor) > 0:
-            itr = iteracija(kor, n=t_max, nat=nat)
+            itr = iteracija(kor, n=t_max)
             gruca += 1
             komp = 0
             for i in range(len(koordinate1)):
@@ -163,7 +162,7 @@ while vklop:
     print('\nSimulacija(st_zacetkov = {}, st_akcij = {}, Max_cas = {}, zelva = {})\n'.format(
         it, st, cas, zel
     ))
-    simulacija(int(it), 1, int(st), int(cas), zel)
+    simulacija(int(it), int(st), int(cas), zel)
     nadaljuj = input("\nNadaljuj ([1]='DA' (privzeto) ali [0]='NE')? ")
     if nadaljuj in {'0'}:
         vklop = False
