@@ -5,8 +5,10 @@ import random
 import turtle
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas, natancnost)
-it1, st1, cas1, nat1 = 10, 20, 100, 18
-barve = ['blue', 'green', 'red', 'orange', 'yellow', 'grey', 'brown']
+it1, st1, cas1, nat1 = 15, 20, 100, 18
+barve1 = ['blue', 'green', 'red', 'orange', 'yellow', 'grey', 'brown']
+barve = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 0, 1), (0, 1, 1), (1, 1, 0),
+         (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5), (0.5, 0.5, 0.5)]
 
 
 def element_simpleksa(dolzina):
@@ -87,7 +89,8 @@ def iteracija(x, n):  # izracun strategije ob casu n, ob konstantni matriki kori
 def narisi(zelva, koordinate1, gruce, poizkus, st_iteracij):
     for k in range(len(koordinate1)):
         zelva.goto(koordinate1[k] * 500 - 250, poizkus * 500 / (st_iteracij - 1) - 250)
-        zelva.pen(pencolor=barve[gruce[k] - 1], pensize=10)
+        zelva.pen(pensize=10)
+        zelva.pencolor(barve[gruce[k] - 1])
         zelva.pendown()
         zelva.goto(koordinate1[k] * 500 - 250 + 1, poizkus * 500 / (st_iteracij - 1) - 250)
         zelva.penup()
