@@ -6,7 +6,7 @@ import random
 import turtle
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas, natancnost)
-it1, st1, cas1, nat1 = 15, 20, 100, 14
+it1, st1, cas1, nat1 = 15, 20, 100, 18
 barve1 = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5),
           (1, 0.5, 0), (1, 0, 0.5), (0.5, 1, 0), (0, 1, 0.5), (0.5, 0, 1), (0, 0.5, 1)]
 barve0 = [(1-1/(m**2+1), 1/(m+1), 0) for m in range(20)]
@@ -120,6 +120,19 @@ def koordinatni_sistem(zelva, st_iteracij):
         zelva.pendown()
         zelva.goto(261, - i * 500 / (st_iteracij - 1) + 250)
         zelva.penup()
+    zelva.pen(pensize=10)
+    for i in range(len(barve0)):
+        if i < len(barve1):
+            zelva.pencolor(barve1[i])
+            zelva.goto(280, - i * 10 + 250)
+            zelva.pendown()
+            zelva.goto(281, - i * 10 + 250)
+            zelva.penup()
+        zelva.pencolor(barve0[i])
+        zelva.goto(270, - i * 10 + 250)
+        zelva.pendown()
+        zelva.goto(271, - i * 10 + 250)
+        zelva.penup()
     zelva.goto(-1000, -1000)
 
 
@@ -143,7 +156,7 @@ def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False, natancnost
             komp = 0
             for i in range(len(koordinate1)):
                 if gruce[i] == 0:
-                    if itr[1][komp] > 10 ** (-(20-natancnost) / len(kor)) * max(itr[1]):
+                    if itr[1][komp] > 10 ** (-(20-natancnost) / len(kor)**(1/2)) * max(itr[1]):
                         gruce[i] = gruca
                     komp += 1
             kor = []
