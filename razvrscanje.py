@@ -4,9 +4,9 @@ import numpy as np  # knjiznica za numericno ucinkovito racunanje
 import random
 import turtle
 
-# privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas)
-it1, st1, cas1 = 10, 20, 100
-barve = ['blue', 'green', 'yellow', 'orange', 'red', 'grey', 'brown']
+# privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas, natancnost)
+it1, st1, cas1, nat1 = 10, 20, 100, 18
+barve = ['blue', 'green', 'red', 'orange', 'yellow', 'grey', 'brown']
 
 
 def element_simpleksa(dolzina):
@@ -17,7 +17,7 @@ def element_simpleksa(dolzina):
     vek.sort()
     vek1 = [0 for _ in range(dolzina)]
     for j in range(dolzina):
-        vek1[j] = vek[j] - vek[j-1]
+        vek1[j] = vek[dolzina - j] - vek[dolzina - j - 1]
     return vek1
 
 
@@ -110,7 +110,7 @@ def koordinatni_sistem(zelva, st_iteracij):
         zelva.penup()
 
 
-def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False):
+def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False, natancnost=nat1):
     #   iteracija nakljucno generiranih zacetnih strategij
     if zel1:
         zelva = turtle.Turtle()
@@ -127,7 +127,7 @@ def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False):
             komp = 0
             for i in range(len(koordinate1)):
                 if gruce[i] == 0:
-                    if itr[1][komp] > 10 ** (-20 / len(kor)) / len(kor):
+                    if itr[1][komp] > 10 ** (-(20-natancnost) / len(kor)) / len(kor):
                         gruce[i] = gruca
                     komp += 1
             kor = []
@@ -159,10 +159,15 @@ while vklop:
         zel = False
     else:
         zel = True
+    nat = input('Zeljena natancnost razdelitve (privzeto {}): '.format(nat1))
+    if nat not in [str(i) for i in range(20)]:
+        nat = nat1
+    else:
+        nat = int(nat)
     print('\nSimulacija(st_zacetkov = {}, st_akcij = {}, Max_cas = {}, zelva = {})\n'.format(
         it, st, cas, zel
     ))
-    simulacija(int(it), int(st), int(cas), zel)
+    simulacija(int(it), int(st), int(cas), zel, natancnost=nat)
     nadaljuj = input("\nNadaljuj ([1]='DA' (privzeto) ali [0]='NE')? ")
     if nadaljuj in {'0'}:
         vklop = False
