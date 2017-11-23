@@ -6,8 +6,9 @@ import turtle
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas, natancnost)
 it1, st1, cas1, nat1 = 15, 20, 100, 15
-barve = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5),
-         (1, 0.5, 0), (1, 0, 0.5), (0.5, 1, 0), (0, 1, 0.5), (0.5, 0, 1), (0, 0.5, 1)]
+barve1 = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5),
+          (1, 0.5, 0), (1, 0, 0.5), (0.5, 1, 0), (0, 1, 0.5), (0.5, 0, 1), (0, 0.5, 1)]
+barve = [(1-1/(m**2+1), 0, 0) for m in range(20)]
 
 
 def element_simpleksa(dolzina):
@@ -116,6 +117,7 @@ def koordinatni_sistem(zelva, st_iteracij):
         zelva.pendown()
         zelva.goto(261, - i * 500 / (st_iteracij - 1) + 250)
         zelva.penup()
+    zelva.goto(-1000, -1000)
 
 
 def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False, natancnost=nat1):
