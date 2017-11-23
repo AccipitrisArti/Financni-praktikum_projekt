@@ -8,7 +8,7 @@ import turtle
 it1, st1, cas1, nat1 = 15, 20, 100, 15
 barve1 = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5),
           (1, 0.5, 0), (1, 0, 0.5), (0.5, 1, 0), (0, 1, 0.5), (0.5, 0, 1), (0, 0.5, 1)]
-barve = [(1-1/(m**2+1), 0, 0) for m in range(20)]
+barve0 = [(1-1/(m**2+1), 1/(m+1), 0) for m in range(20)]
 
 
 def element_simpleksa(dolzina):
@@ -87,8 +87,10 @@ def iteracija(x, n, ponovitev=1):  # izracun strategije ob casu n, ob konstantni
     return [w, pop]
 
 
-def narisi(zelva, koordinate1, gruce, poizkus, st_iteracij):
+def narisi(zelva, koordinate1, gruce, poizkus, st_iteracij, barve=barve0):
     maxx = max(koordinate1)
+    if max(gruce) <= 4:
+        barve = barve1
     for k in range(len(koordinate1)):
         zelva.goto(koordinate1[k] * 500 / maxx - 250, poizkus * 500 / (st_iteracij - 1) - 250)
         zelva.pen(pensize=10)
