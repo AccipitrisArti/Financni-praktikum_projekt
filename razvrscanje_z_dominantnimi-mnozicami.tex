@@ -74,26 +74,7 @@ Z vidika \textit{clustering game} je simetrično ravnovesje tisto, kjer imata ob
 $$\begin{cases}
 (Ax)_i=x^TAx; & i\in\sigma(x) \\ (Ax)_i\leq x^TAx; & i\not\in\sigma(x)
 \end{cases}$$
-
-
-
-
-
-
-
-
-% definicija podpore? \sigma(x) = {i; x_i > 0}? Mogoče bi dokončala poglavje 2 (Definicija 2.1, izrek 1)?
-ki pa ga lahko interpretiramo kot notranjo homogenost gruče predstavljeno s podporo $\sigma(x)$ od x-a, za pričakovano podobnost katerega koli elementa iz gruče z nekim drugim elementom bo enaka.
-% nerazumljiva poved ...
-
-
-
-
-
-
-
-
-
+ki pa ga lahko interpretiramo kot notranjo homogenost gruče predstavljeno s \textit{podporo x-a} $\sigma(x)$, kjer je $\sigma(x) = \{i\in V; x_i > 0\}$ indeksna množica pozitivnih komponent vektorja x.
 Vendar pa Nash ne nujno zagotavlja pogoj maksimuma, kar lahko vseeno zagotovimo z izboljšanjem Nashevega ravnovesja poznanega kot \textit{evolucijsko stabilna strategija (ESS)}. Simetrično Nashevo ravnovesje $x\in\Delta$ je evolucijsko stabilna strategija, če poleg pogoja $y^TAx\leq x^TAx \text{ za vse } y\in\Delta$ zadostuje tudi pogoju $y^TAx= x^TAx \Rightarrow y^TAx<x^TAx \text{ za vse } y\in\Delta\setminus x$.
 \begin{theorem}
 Naj bo A matrika podobnosti pri primeru problema združevanja in naj bo $\Gamma$ \textit{clustering game}. Če je C dominantna množica v A, potem je vektor $x^C$ ESS od $\Gamma$. Obratno, če je vektor x ESS od $\Gamma$, potem je $C=\sigma(x)$ dominantna množica od A, če $(Ax)_i\not=x^TAx \text{ za vse } i \not\in C$.
@@ -102,15 +83,6 @@ Naj bo A matrika podobnosti pri primeru problema združevanja in naj bo $\Gamma$
 \section{Razvrščanje z uporabo dominantnih množic}
 Naivna strategija bi lahko bilo oštevilčenje vseh podmnožic $C\subseteq V$ in preverjanje pogojev iz Definicije 1. Ta rešitev je očitno precej neučinkovita, zato si bomo ogledali dve alternativni strategiji. Obe rešitvi izvirata iz teorije iger.
 
-
-
-
-
-
-
-
-
-% od tu naprej je še podrobneje za pregledat
 \subsection{Dinamika replikatorjev}
 Dinamika replikatorjev (RD) je deterministična dinamična igra, ki je bila razvita v evolucijski teoriji iger. Ta teorija izvira iz zgodnjih sedemdesetih let kot poskus uporabe načel in orodja teorije iger v biološke namene za model evolucije živali. Predvideva idealni scenarij, s katerim so posamezniki ponavljajoč naključno prirejeni iz velike, idealno neskončne, populacije v igro dveh igralcev. V nasprotju s klasično teorijo iger se tukaj igralci naj ne bi obnašali racionalno ali naj ne bi imeli popolnih informacij o igri, ampak delujejo v skladu s podedovanim vedenjskim vzorcem ali čisto strategijo, in domneva se, da zaradi evolucijskega izbora proces sčasoma deluje na porazdelitev vedenja. Splošni razred evolucijskih enačb je podan z naslednjim nizom navadnih diferencialnih enačb:
 \begin{gather}
@@ -119,16 +91,17 @@ Dinamika replikatorjev (RD) je deterministična dinamična igra, ki je bila razv
 za $i = 1,\ldots,n$, kjer je x funkcija odvisna od t (čas).
 
 \subsection{Dinamika okužb in imunizacije}
-Dinamika okužb in imunizacije je razred dinamike diskretnega časa, ki je bila uvedena, da bi premagali nekatere računalniške probleme s standardno evolucijsko dinamiko, ki vključujejo dinamiko replikatorjev. Naj omenimo nekaj problemov evolucijske dinamike kot dinamike replikatorjev: ima kvadratno kompleksnost prostora / časa na iteracijo, niso vse stacionarne točke Nasheva ravnovesja, konvergirajo le v limiti po številu iteracij in odkrivanje podpore ravnovesja je nerodno, če se dinamika ustavi pred pravilno konvergenco (tj. po končnem številu korakov).\\
+Dinamika okužb in imunizacije je razred dinamike diskretnega časa, ki je bila uvedena, da bi premagali nekatere računalniške probleme s standardno evolucijsko dinamiko, ki vključujejo dinamiko replikatorjev (RD). Naj omenimo nekaj problemov evolucijske dinamike kot dinamike replikatorjev: ima kvadratno kompleksnost prostora / časa na iteracijo, niso vse stacionarne točke Nasheva ravnovesja, konvergirajo le v limiti po številu iteracij in odkrivanje podpore ravnovesja je nerodno, če se dinamika ustavi pred pravilno konvergenco (tj. po končnem številu korakov).\\
 Dinamika okužb in imunizacije je naslednja:
-\begin{gather} x(t + 1) = \delta_{S(x)}(x)\lbrack S(x) - x\rbrack + x \end{gather},
+\begin{gather} x(t + 1) = \delta_{S(x)}(x)\lbrack S(x) - x\rbrack + x \end{gather}
 kjer smo zapisali x za x (t). Funkcija $S:\Delta\rightarrow\Delta$ je funkcija izbire strategije, ki izpolnjuje naslednje lastnosti:
 \begin{gather}
 S (x) = \begin{cases}
 y & \text{ za nek } y \in \Upsilon (x), \text{ če je } \Upsilon (x) \not= \emptyset, \\
 x & \text{sicer,} \end{cases} \end{gather}
 kjer $\Upsilon(x)$ predstavlja množico tako imenovanih infektivnih strategij za x in je definirana kot $\Upsilon(x) = \{y \in\Delta : (y - x)^T A x> 0\}$.\\
-Dokler obstaja $y \in\Upsilon (x)$, strategija x ne more biti ravnovesna po definiciji infektivne strategije. Če je temu tako, se dinamika (7) zmeša x in y (okuži x z y), dokler ne pride do kršitve Nashevih pogojev, ki ga povzroči y, kar se zgodi z upoštevanjem mešalnega faktorja $\delta y (x)$, ki je podan z
+Odvisno od izbire S(x) v (4) lahko dobimo drugačno dinamiko.\\
+Dokler obstaja $y \in\Upsilon (x)$, strategija x ne more biti ravnovesna po definiciji infektivne strategije. Če je temu tako, dinamika (4) meša strategiji x in y (okuži x z y), dokler ne pride do kršitve Nashevih pogojev, ki ga povzroči y, kar se zgodi z upoštevanjem mešalnega faktorja $\delta y (x)$, ki je podan z
 \begin{gather}
 \delta y (x) =
 \begin{cases}
@@ -136,64 +109,38 @@ min\{\frac{(x-y)^T A x}{(y-x)^T A (y-x)}, 1\} ,& \text{če} (y - x)^T A (y - x) 
 1, & \text{sicer.}
 \end{cases}
 \end{gather}
-Dinamika okužb in imunizacije prinaša fiksno točko, ko je $\Upsilon(x) = \emptyset$. Če je temu tako, je tudi x Nashevo ravnovesje:
+Dinamika okužb in imunizacije prinaša fiksno (ravnovesno) točko, ko je $\Upsilon(x) = \emptyset$. Če je temu tako, je tudi x Nashevo ravnovesje:
 \begin{theorem}
 Naj bo $x \in\Delta$ strategija. Potem so naslednje izjave ekvivalentne: 
 \begin{enumerate}
 \item če $\Upsilon(x) = \emptyset$, za x ni infektivne strategije; 
 \item x je Nasheva strategija; 
-\item x je fiksna točka za dinamiko (7).
+\item x je fiksna (ravnovesna) točka za dinamiko (4).
 \end{enumerate}
 \end{theorem}
 \textbf{Dokaz:} Omejimo se na dinamiko replikatorja. Če se omejimo na simetrične matrike izplačil, imamo povprečno izplačilo strogo naraščajoče vzdolž katere koli nekonstantne poti dinamike okužb in imunizacije: 
 \begin{theorem}
-Naj bo $\{x(t)\}_t \geq 0$ pot po (7). Torej za vse $t \geq 0$, $u (x (t + 1), x (t + 1)) \geq u (x (t), x (t))$ z enakostjo natanko tedaj, ko $x (t) = x (t + 1)$, pod pogojem, da je matrica izplačila simetrična.
+Naj bo $\{x(t)\}_t \geq 0$ pot po (4). Torej za vse $t \geq 0$, $u (x (t + 1), x (t + 1)) \geq u (x (t), x (t))$ z enakostjo natanko tedaj, ko $x (t) = x (t + 1)$, pod pogojem, da je matrika izplačila simetrična.
 \end{theorem}
-\textbf{Dokaz:} Odvisno od izbire S(x) v (7) lahko dobimo drugačno dinamiko. V preostalem delu bomo pregledali še eno posebno, ki je preprosta in vodi do lepih lastnosti. Naj bo $u \in arg max_{j \in V} (A x)_j$ in $v \in arg min_{j \in\sigma (x)} (A x)_j$ in naj bo
-$$z^+ = e^u \text{ in } z^- = \frac{x_v}{1 - x_v} (x - e^v) + x, $$ kjer je $e^u$ ničelni vektor z u-tim elementom 1. Funkcija izbire čiste strategije izbirna $S_{\text{čista}}$ je definirana kot
-$$ S_{\text{čista}}(x) = \begin{cases}
-z^+ & \text{če} (z^+ - z^-)^T A x> 0\\
-z^- & \text{če} (z^+ - z^-)^T A x <0\\
-x & \text{sicer.}
-\end{cases}$$
-Ker je iskanje prostora za infektivno strategijo zmanjšano z $\Delta$ do končne množice, ni očitno, da je $S_{\text{čista}} (x)$ dobro definirana izbirna funkcija, to je, da izpolnjuje (8). Vendar pa se lahko dokaže, da obstaja infektivna strategija za x natanko tedaj, ko je $S_{\text{čista}} (x)$ infektivna za x.\\
-Druga lastnost, ki velja za čisto dinamiko okužb in imunizacije, ki si jo deli tudi z dinamiko replikatorjev, je karakterizacija ESS ravnovesja v smislu asimptotično stabilnih točk dinamike pri simetričnih matrikah izplačil.
-\begin{theorem} 
-Stanje x je asimptotično stabilno za dinamiko okužb in imunizacije s funkcijo$S_{\text{čista}}$ kot funkcijo izbire strategije natanko tedaj, ko je x ESS, pod pogojem, da je matrika izplačil simetrična.
-\end{theorem}
-\textbf{Dokaz.} Ta izbirna funkcija kaže lepo lastnost, da je večanje kompleksnosti na iteracijo linearno tako v prostoru kot v času, v nasprotju z dinamiko replikatorja, ki ima kvadratno kompleksnost prostora / časa na iteracijo. 
 
 \subsection{Iskanje več gruč}
-Dinamika replikatorja in dinamika okužb in imunizacije omogočata, da po konvergenci najdemo eno prevladujočo množico. Načeloma je cilj označiti vse dominantne množice za primere težav s problematiko združevanja, vendar je to v splošnem računsko intenzivno, ker imamo lahko eksponentno veliko gruč. V praksi je nedokončana, vendar dobra, pokritost dominantnih množic navadno zadostna za namene uporabe. Preglejmo nekatere računske strategije, ki so pomembne za dinamiko okužb in imunizacije, za (delno) označevanje dominantnih množic.
+Dinamika replikatorja in dinamika okužb in imunizacije omogočata, da po konvergenci najdemo eno prevladujočo množico. Načeloma je cilj označiti vse dominantne množice za primere težav s problematiko združevanja, vendar je to v splošnem računsko intenzivno, ker imamo lahko eksponentno veliko gruč. V praksi je nedokončana, vendar dobra, pokritost dominantnih množic navadno zadostna za namene uporabe. Najpogosteje uporabljane računske strategije, ki so pomembne za dinamiko okužb in imunizacije, za (delno) označevanje dominantnih množic, so strategija z več začetki, strategija luščenja, tabu-seznam strategije, strategija destabilizacije in druge.
 
 \subsubsection{Strategija z več začetki} Prva strategija je zelo naiva in je sestavljena iz ponovnega zagona dinamike iz različnih, naključnih točk v simpleksu. Ta strategija je učinkovita, če so podatki sestavljeni iz nekaj gruč z velikimi bazeni privlačnosti, tako da je verjetnost vzorčenja točke, ki pripada posameznemu bazenu, relativno visoka. Jasno je, da ni nobenega zagotovila, da bo ta postopek večkrat izpisal iste gruče. Zato je korak po obdelavi namenjen prepoznavanju in izločevanju ponavljajočih se gruč. Strategija z več začetki je dolgoročno optimalna, ker bo na koncu naštela vse dominantne množice, vendar pa lahko zahteva zelo veliko število vzorcev, kar je v praksi neučinkovito.
 
-\subsubsection{Strategija luščenja} Ta strategija sledi drugačni filozofiji in se uporablja predvsem v primerih, ko nas ne zanima iskanje prekrivajočih se gruč. Ideja je spet zelo preprosta in je sestavljena iz iterativnega izvlečenja dominantne množice in odstranitve njenih točk. S tem je očitno zagotovljeno, da se nobena dominantna množica ne bo večkrat pridobivala. Vendar ta strategija ni optimalna, ker je na eni strani število dominantnih množic, ki jih je potencialno mogoče označiti, navzgor omejeno s skupnim številom točk; po drugi strani pa, razen prve dominantne množice, vsi naslednje niso nujno dominantne množice prvotnega problema razvrščanja, saj se vsakič, ko so točke dominantne množice odvzete, spremeni osnovni problem združevanja. Kljub pomanjkanju optimnosti je strategija luščenja računalniško privlačna in se jo v praksi uporabljala v številnih aplikacijah.
+\subsubsection{Strategija luščenja} Ta strategija sledi drugačni filozofiji in se uporablja predvsem v primerih, ko nas ne zanima iskanje prekrivajočih se gruč. Ideja je spet zelo preprosta in je sestavljena iz iterativnega izvlečenja dominantne množice in odstranitve njenih točk. S tem je očitno zagotovljeno, da se nobena dominantna množica ne bo večkrat pridobivala. Vendar ta strategija ni optimalna, ker je na eni strani število dominantnih množic, ki jih je potencialno mogoče označiti, navzgor omejeno s skupnim številom točk; po drugi strani pa, razen prve dominantne množice, vse naslednje niso nujno dominantne množice prvotnega problema razvrščanja, saj se vsakič, ko so točke dominantne množice odvzete, spremeni osnovni problem združevanja. Kljub pomanjkanju optimnosti je strategija luščenja računalniško privlačna in se jo v praksi uporabljala v številnih aplikacijah.
+
+\subsubsection{Tabu-seznam strategije} Zadnja strategija temelji na dinamiki okužb in imunizacije. Spet bomo preprosto skicirali splošno idejo. Strategija tabu-seznamov sledi cilju nepopolnega nabiranja dominantnih množic, ki so podobne strategiji luščenja, vendar kljub temu zagotavlja dobro pokritost in je brez žrtvovanja optimalne rešitve, kar pomeni, da so izločene gruče dominantne množice prvotnega problema z gručami. Zamisel je ohraniti tabu-seznam med procesom razvrščanja, to je seznamom točk, ki jih ne bi smeli upoštevati med izločanjem dominantne množice. V nekaterih pogledih to počne tudi strategija luščenja, saj so vse točke že izločenih dominantnih množic dodane na tabu-seznam. Vendar, da bi preprečili možnost pridobivanja neveljavnih dominantnih množic, strategija tabu-seznamov preveri veljavnost domnevnih dominantnih množic, ki jih najdemo pod omejitvijo tabu-seznamov. V vsaki dominantni množici izločitvene iteracije je dominantna množica $C \subset V$ ugotovljena z izvajanjem dinamike okužb in imunizacij z naključno inicializacijo z omejitvijo, da ni mogoče uporabiti nobene točke v tabu-seznamu $T \subset V$, to je $C \subseteq V\setminus T$. Ta omejitev preprečuje, da bi bila C veljavna dominantna množica na splošno, to pomeni, da C ne bi bila dominantna množica glede na celotno množico točk V. Da bi preverili veljavnost domnevne dominantne množice C, se dinamika okužb in imunizacij ponovi, inicializira karakteristični vektor $x^C$ in dovoljuje uporabo vseh točk (tudi tistih v tabu-seznamu). Naj bo $C' \subseteq V$ dominantna množica, ki je veljavna, vendar morda ni nova. Obstajata torej dva možna scenarija, v katerih C' lahko štejemo za novo veljavno dominantno množico, ki se doda končnemu rezultatu razvrščanja: $C' \nsubseteqq T$ ali $C' \subseteq T$, toda C' prej še nismo našli.
+V prvem primeru se tabu-seznam posodablja z dodajanjem katere koli točke iz $C'\setminus T$ (npr. naključne), medtem ko ostane v prvem primeru tabu-seznam tak, kot je. Če se namesto tega izkaže, da je $C'\subseteq T$, toda je C' že bilo najdeno, zavrnemo C' in dodamo v tabu-seznam katero koli izmed točk iz $V\setminus T$.
+Strategija tabu-seznam zagotavlja, da se bodisi veljavna in nova dominantna množica pridobi pri vsaki iteraciji, ali pa se seznam tabu poveča za eno.
+
+\section{Algoritem dinamike okužb in imunizacije s strategijo luščenja}
+\texttt{def delta(w):  \# izbira nakjučnega elementa iz simpleksa\\
+ \hspace{3ex}koordinate = element\_simpleksa(len(w))\\
+ \hspace{3ex}return np.array(koordinate)}
 
 
-
-
-
-
-
-
-% mogoče bi opis te strategije malo skrajšala.
-\subsubsection{Tabu-seznam strategije} Zadnja strategija temelji na dinamiki okužb in imunizacije. Spet bomo preprosto skicirali splošno idejo. Strategija tabu-seznamov sledi cilju nepopolnega nabiranja dominantnih množic, ki so podobne strategiji luščenja, vendar kljub temu zagotavlja dobro pokritost in je brez žrtvovanja optimalne rešitve, kar pomeni, da so izločene gruče dominantne množice prvotnega problema z gručami. Zamisel je ohraniti tabu-seznam med procesom razvrščanja, to je seznamom točk, ki jih ne bi smeli upoštevati med izločanjem dominantne množice. V nekaterih pogledih to počne tudi strategija luščenja, saj so vse točke že izločenih dominantnih množic dodane na tabu-seznam. Vendar, da bi preprečili možnost pridobivanja neveljavnih dominantnih množic, strategija tabu-seznamov preveri veljavnost domnevnih dominantnih množic, ki jih najdemo pod omejitvijo tabu-seznamov. V vsaki dominantni množici izločitvene iteracije je dominantna množica $C \subset V$ ugotovljena z izvajanjem dinamike okužb in imunizacij z naključno inicializacijo z omejitvijo, da ni mogoče uporabiti nobene točke v tabu-seznamu $T \subset V$, to je $C \subseteq V\setminus T$. Ta omejitev preprečuje, da bi bila C veljavna dominantna množica na splošno, to pomeni, da C ne bi bila dominantna množica glede na celotno množico točk V. Da bi preverili veljavnost domnevne dominantne množice C, se dinamika okužb in imunizacij ponovi, inicializira karakteristični vektorj $x^C$ in dovoljuje uporabo vseh točk (tudi tistih v tabu-seznamu). Naj $C' \subseteq V$ naj bo dominantna množica, ki je veljavna, vendar morda ni nova. Obstajata torej dva možna scenarija, v katerih C' lahko štejemo za novo veljavno dominantno množico, ki se doda končnemu rezultatu razvrščanja:
-\begin{enumerate}
-\item $C' \nsubseteqq T$,
-\item $C' \subseteq T$, toda C' prej še nismo našli. V prvem primeru se tabu-seznam posodablja z dodajanjem katere koli točke iz $C'\setminus T$ (npr. naključne), medtem ko ostane v prvem primeru tabu-seznam tak, kot je. Če se namesto tega izkaže, da je $C'\subseteq T$, toda je C' že bilo najdeno, zavrnemo C' in dodamo v tabu-seznam katero koli izmed točk iz $V\setminus T$.
-\end{enumerate}
-Strategija tabu-seznam zagotavlja, da se bodisi veljavna in nova dominantna množica pridobi pri vsaki iteraciji, ali pa se seznam tabu poveča za eno, s čimer se omeji število iteracij na $max(\lvert V \rvert, \text{\#najdenih gruč})$. Upoštevajmo, da bi lahko na časovno tabelo dodali še več točk, da bi pospešili proces združevanja, pri čemer bi sčasoma našli manjše število dominantnih množic.
-
-
-
-
-
-% vnos delčkov kode in slike poizkusa.
-
-
-
-
-
+\section{Zaključek}
+V najinem projektu sva se odločila, da za razvrščanje s pomočjo dominantnih množic sprogramirava dinamiko okužb in imunizacije s strategijo luščenja. Dinamika okužb in imunizacije je v najinem primeru iskanje ravnovesja v bimatrični igri $\lbrack A,A^T\rbrack$, kjer je A simetrična matrika podobnosti, kar nas privede do dominantne množice (gruče 1), ki predstavlja množico akcij, med katerimi v ravnovesju meša igralec 1. Z uporabo strategije luščenja pa sicer precej negotovo sestavi še druge gruče.
 
 \end{document}
