@@ -14,18 +14,18 @@
 \begin{document}
 \maketitle
 \section{Uvod}
-Grupiranje (ang. Clustering) je postopek razvrščanja predmetov znotraj razreda v podrazrede (cluster) tako, da so si predmeti znotraj istega podrazreda bolj podobni med sabo, kot so si podobni z elementi iz ostalih podrazredov. \\
+Grupiranje (ang. Clustering) je postopek razvrščanja predmetov znotraj množice v gruče (cluster) tako, da so si predmeti znotraj iste gruče bolj podobni med sabo, kot so si podobni z elementi iz ostalih gruč. \\
 Problem združevanja lahko opišemo z uteženim grafom, ki ga definiramo kot trojico $G = (V,E,\omega)$, kjer je $V = {1,\ldots,n}$ končna množica vozlišč, $E \subseteq V \times V$ množica usmerjenih
 povezav in $\omega: E \rightarrow \mathbb{R}$ funkcija, ki vsakemu vozlišču dodeli neko vrednost(težo). Vozlišča grafa G ustrezajo predmetom, ki jih je potrebno združevati. \\
 Povezave predstavljajo, kateri predmeti so med seboj povezani, utežene povezave pa odražajo podobnosti med povezanimi predmeti. Poleg tega matrika $A_{i,j} = \omega(i,j) \text{ za vse } i, j \in V$ predstavlja podobnost med vozlišči. Imenujemo jo matrika podobnosti. \\
 Osnovni lastnosti, ki morata zadostovati gruči, sta:
 \begin{itemize}
 \item Notranja homogenost: elementi, ki pripadajo gruči si morajo biti med seboj podobni
-\item Maksimalnost: gruče ne moremo dodatno razširiti z uvedbo zunanjih elementov
+\item Maksimalnost: gruče ne moremo dodatno povečati z uvedbo zunanjih elementov
 \end{itemize}
 
 \begin{definition}
-Naj graf G predstavlja primer združevanja množic in naj bo $C \subseteq V$ neprazna podmnožica. \textit{Povprečna utežena vhodna stopnja} glede na C je definirana kot
+Naj graf G predstavlja primer združevanja množic in naj bo $C \subseteq V$ neprazna podmnožica. \textbf{Povprečna utežena vhodna stopnja} glede na C je definirana kot
 $$awindeg_C(i) = \frac{1}{\lvert C \rvert}\sum_{j\in C}A_{i,j}$$
 kjer $\lvert C \rvert$ predstavlja velikost množice C. Za $j\in C$ definiramo
 $$\phi_C(i,j) = A_{i,j} - awindeg_C(j)$$
@@ -57,32 +57,60 @@ max f(x) = x^T A x \\
 Kjer je $\Delta = \{x\in\mathbb{R}^n: \sum_{j\in V}x_j = 1 \text{ in } x_j \geq 0 \text{ za vsak } j\in V\}$ standardni simpleks iz $\mathbb{R}^n$.
 
 \section{Povezava s teorijo grafov}
-Naj bo $G=(V,E)$ neusmerjen graf, kjer je $V={1,2,\ldots,n}$ množica vozlišč in $E\subseteq V\times V$ množica povezav v grafu. Dve vozlišči $u, v \in V$ sta sosednji, če $(u, v) \in E$. Podmnožici vozlišč $C \subseteq V$ pravimo klika, če so si vsa vozlišča iz te množice med seboj sosednja.\\
+Naj bo $G=(V,E)$ neusmerjen graf, kjer je $V={1,2,\ldots,n}$ množica vozlišč in $E\subseteq V\times V$ množica povezav v grafu. Dve vozlišči $u, v \in V$ sta sosednji, če $(u, v) \in E$. Podmnožici vozlišč $C \subseteq V$ pravimo klika, če so si vsa vozlišča iz te množice med seboj sosedna.\\
 Klika C na neusmerjenem grafu F je največja (maximal), če ne obstaja klika D na grafu G, tako da $C \subseteq D$ in $C \not= D$.
 \begin{theorem}
 Naj bo graf G neusmerjen z matriko sosednosti $A_G$ in naj bo $0 < \alpha < 1$. Vsaka največja klika C grafa G je dominantna množica od $A_\alpha = A_G + \alpha I$. Obratno, če je C dominantna množica od $A_\alpha$ potem je C največja klika v G.
 \end{theorem}
 
 \section{Povezava s teorijo iger}
-Teorija iger (za razliko od teorije optimizacije) lahko obravnava tudi nesimetrične matrike. Ideja je v zasnovi simetrične igre »clustering game« med dvema igralcema. Akcije V so čiste strategije, ki so na voljo igralcem, matrika A pa predstavlja njihova plačila. Oba igralca imata popolno znanje o poteku igre in sprejemata neodvisne odločitve o tem katero strategijo bosta izbrala. Matrika izplačil predstavlja prihodke, ki jih dobi igralec če se igra določena strategija. Torej če igralec 1 in 2 igrata strategijo $(i,j)\in V\times V$ potem igralec 1 dobi izplačilo $A_{i,j}$, igralec 2 pa $A_{j,i}$.
+Teorija iger (za razliko od teorije optimizacije) lahko obravnava tudi nesimetrične matrike. Ideja je v zasnovi simetrične igre »clustering game« med dvema igralcema. Akcije V so čiste strategije, ki so na voljo igralcem, matrika A pa predstavlja njihova izplačila. Oba igralca imata popolno znanje o poteku igre in sprejemata neodvisne odločitve o tem katero strategijo bosta izbrala. Matrika izplačil predstavlja prihodke, ki jih dobi igralec če izbere določeno čisto strategijo. Torej, če igralca 1 in 2 uporabita strategijo $(\delta(i),\delta(j))$, kjer je $(i,j)\in V\times V$ potem igralec 1 dobi izplačilo $A_{i,j}$, igralec 2 pa $A_{j,i}$.
 Mešana strategija $x\in\Delta$ je verjetnost porazdelitve čistih strategij, ki modelira stohastično strategijo igre nekega igralca. Če igralec 1 in 2 igrata mešani strategiji $(x_1,x_2)\in\Delta\times\Delta$  potem sta pričakovani izplačili igralcev $x_1^TAx_2$ in $x_2^TAx_1$.
 Nashevo ravnovesje je profil mešane strategije $(x_1,x_2)\in V\times V$ pri katerem se noben od igralcev ne more povečati svojega izplačila ob nespremenjeni igri drugih igralcev, torej 
 $$y_1^TAx_2\leq x_1^TAx_2 \text{ in } y_2^TAx_1\leq x_2^TAx_1$$
-Za vse $(y_1,y_2)\in\Delta\times\Delta$. Nashevo ravnovesje je simetrično če velja $x_1=x_2$. v primeru simetričnega Nashevega ravnovesja se prejšni neenakosti združita v
+Za vse $(y_1,y_2)\in\Delta\times\Delta$. Nashevo ravnovesje je simetrično, če velja $x_1=x_2$. V primeru simetričnega Nashevega ravnovesja se prejšni neenakosti združita v
 $$y^TAx\leq x^TAx \text{ za vse } y\in\Delta$$.
-Z vidika clustering game je simetrično ravnovesje tisto kjer imata oba igralca enake hipoteze o članstvu v gruči in noben od igralcev ne želi iz grupe. Še več, prejšni pogoj pomeni:
+Z vidika \textit{clustering game} je simetrično ravnovesje tisto, kjer imata oba igralca enake hipoteze o članstvu v gruči in noben od igralcev ne želi iz gruče. Še več, prejšni pogoj pomeni:
 $$\begin{cases}
 (Ax)_i=x^TAx; & i\in\sigma(x) \\ (Ax)_i\leq x^TAx; & i\not\in\sigma(x)
 \end{cases}$$
-Ki pa ga lahko interpretiramo kot notranjo homogenost gruče predstavljeno z podporo $\sigma(x)$ od x-a, za pričakovano podobnost katerega koli elementa iz gruče z nekim drugim elementom bo enaka.
-Vendar pa Nash ne nujno zagotavlja pogoj maksimuma, kar lahko vseeno zagotovimo z izboljšanjem Nashevega ravnovesja poznan kot evolucijsko stabilna strategija (ESS). Simetrično Nashevo ravnovesje $x\in\Delta$ je evolucijsko stabilna metoda če poleg pogoja $y^TAx\leq x^TAx \text{ za vse } y\in\Delta$ zadostuje tudi pogoju $y^TAx= x^TAx \Rightarrow x^TAx<x^TAx \text{ za vse } y\in\Delta\setminus x$.
+
+
+
+
+
+
+
+
+% definicija podpore? \sigma(x) = {i; x_i > 0}? Mogoče bi dokončala poglavje 2 (Definicija 2.1, izrek 1)?
+ki pa ga lahko interpretiramo kot notranjo homogenost gruče predstavljeno s podporo $\sigma(x)$ od x-a, za pričakovano podobnost katerega koli elementa iz gruče z nekim drugim elementom bo enaka.
+% nerazumljiva poved ...
+
+
+
+
+
+
+
+
+
+Vendar pa Nash ne nujno zagotavlja pogoj maksimuma, kar lahko vseeno zagotovimo z izboljšanjem Nashevega ravnovesja poznanega kot \textit{evolucijsko stabilna strategija (ESS)}. Simetrično Nashevo ravnovesje $x\in\Delta$ je evolucijsko stabilna strategija, če poleg pogoja $y^TAx\leq x^TAx \text{ za vse } y\in\Delta$ zadostuje tudi pogoju $y^TAx= x^TAx \Rightarrow y^TAx<x^TAx \text{ za vse } y\in\Delta\setminus x$.
 \begin{theorem}
-Naj bo A matrika podobnosti pri primeru problema združevanja in naj bo $\Gamma$ clustering game. Če je C dominantna množica v A, potem je vektor $x^C$ ESS od $\Gamma$. Obratno, če je vektor x ESS od $\Gamma$, potem je $C=\sigma(x)$ dominantna množica od A, če $(Ax)_i\not=x^TAx \text{ za vse } i \not\in C$.
+Naj bo A matrika podobnosti pri primeru problema združevanja in naj bo $\Gamma$ \textit{clustering game}. Če je C dominantna množica v A, potem je vektor $x^C$ ESS od $\Gamma$. Obratno, če je vektor x ESS od $\Gamma$, potem je $C=\sigma(x)$ dominantna množica od A, če $(Ax)_i\not=x^TAx \text{ za vse } i \not\in C$.
 \end{theorem}
 
 \section{Razvrščanje z uporabo dominantnih množic}
-Naivna strategija bi lahko bilo oštevilčenje vseh podmnožic $C\subseteq V$ preverjanje pogojev iz Definicije 1. Ta rešitev je očitno precej neučinkovita, zato si bomo ogledali dve alternativni strategiji. Obe rešitvi izvirata iz teorije iger.
+Naivna strategija bi lahko bilo oštevilčenje vseh podmnožic $C\subseteq V$ in preverjanje pogojev iz Definicije 1. Ta rešitev je očitno precej neučinkovita, zato si bomo ogledali dve alternativni strategiji. Obe rešitvi izvirata iz teorije iger.
 
+
+
+
+
+
+
+
+
+% od tu naprej je še podrobneje za pregledat
 \subsection{Dinamika replikatorjev}
 Dinamika replikatorjev (RD) je deterministična dinamična igra, ki je bila razvita v evolucijski teoriji iger. Ta teorija izvira iz zgodnjih sedemdesetih let kot poskus uporabe načel in orodja teorije iger v biološke namene za model evolucije živali. Predvideva idealni scenarij, s katerim so posamezniki ponavljajoč naključno prirejeni iz velike, idealno neskončne, populacije v igro dveh igralcev. V nasprotju s klasično teorijo iger se tukaj igralci naj ne bi obnašali racionalno ali naj ne bi imeli popolnih informacij o igri, ampak delujejo v skladu s podedovanim vedenjskim vzorcem ali čisto strategijo, in domneva se, da zaradi evolucijskega izbora proces sčasoma deluje na porazdelitev vedenja. Splošni razred evolucijskih enačb je podan z naslednjim nizom navadnih diferencialnih enačb:
 \begin{gather}
@@ -140,11 +168,32 @@ Dinamika replikatorja in dinamika okužb in imunizacije omogočata, da po konver
 
 \subsubsection{Strategija z več začetki} Prva strategija je zelo naiva in je sestavljena iz ponovnega zagona dinamike iz različnih, naključnih točk v simpleksu. Ta strategija je učinkovita, če so podatki sestavljeni iz nekaj gruč z velikimi bazeni privlačnosti, tako da je verjetnost vzorčenja točke, ki pripada posameznemu bazenu, relativno visoka. Jasno je, da ni nobenega zagotovila, da bo ta postopek večkrat izpisal iste gruče. Zato je korak po obdelavi namenjen prepoznavanju in izločevanju ponavljajočih se gruč. Strategija z več začetki je dolgoročno optimalna, ker bo na koncu naštela vse dominantne množice, vendar pa lahko zahteva zelo veliko število vzorcev, kar je v praksi neučinkovito.
 
+\subsubsection{Strategija luščenja} Ta strategija sledi drugačni filozofiji in se uporablja predvsem v primerih, ko nas ne zanima iskanje prekrivajočih se gruč. Ideja je spet zelo preprosta in je sestavljena iz iterativnega izvlečenja dominantne množice in odstranitve njenih točk. S tem je očitno zagotovljeno, da se nobena dominantna množica ne bo večkrat pridobivala. Vendar ta strategija ni optimalna, ker je na eni strani število dominantnih množic, ki jih je potencialno mogoče označiti, navzgor omejeno s skupnim številom točk; po drugi strani pa, razen prve dominantne množice, vsi naslednje niso nujno dominantne množice prvotnega problema razvrščanja, saj se vsakič, ko so točke dominantne množice odvzete, spremeni osnovni problem združevanja. Kljub pomanjkanju optimnosti je strategija luščenja računalniško privlačna in se jo v praksi uporabljala v številnih aplikacijah.
+
+
+
+
+
+
+
+
+% mogoče bi opis te strategije malo skrajšala.
 \subsubsection{Tabu-seznam strategije} Zadnja strategija temelji na dinamiki okužb in imunizacije. Spet bomo preprosto skicirali splošno idejo. Strategija tabu-seznamov sledi cilju nepopolnega nabiranja dominantnih množic, ki so podobne strategiji luščenja, vendar kljub temu zagotavlja dobro pokritost in je brez žrtvovanja optimalne rešitve, kar pomeni, da so izločene gruče dominantne množice prvotnega problema z gručami. Zamisel je ohraniti tabu-seznam med procesom razvrščanja, to je seznamom točk, ki jih ne bi smeli upoštevati med izločanjem dominantne množice. V nekaterih pogledih to počne tudi strategija luščenja, saj so vse točke že izločenih dominantnih množic dodane na tabu-seznam. Vendar, da bi preprečili možnost pridobivanja neveljavnih dominantnih množic, strategija tabu-seznamov preveri veljavnost domnevnih dominantnih množic, ki jih najdemo pod omejitvijo tabu-seznamov. V vsaki dominantni množici izločitvene iteracije je dominantna množica $C \subset V$ ugotovljena z izvajanjem dinamike okužb in imunizacij z naključno inicializacijo z omejitvijo, da ni mogoče uporabiti nobene točke v tabu-seznamu $T \subset V$, to je $C \subseteq V\setminus T$. Ta omejitev preprečuje, da bi bila C veljavna dominantna množica na splošno, to pomeni, da C ne bi bila dominantna množica glede na celotno množico točk V. Da bi preverili veljavnost domnevne dominantne množice C, se dinamika okužb in imunizacij ponovi, inicializira karakteristični vektorj $x^C$ in dovoljuje uporabo vseh točk (tudi tistih v tabu-seznamu). Naj $C' \subseteq V$ naj bo dominantna množica, ki je veljavna, vendar morda ni nova. Obstajata torej dva možna scenarija, v katerih C' lahko štejemo za novo veljavno dominantno množico, ki se doda končnemu rezultatu razvrščanja:
 \begin{enumerate}
 \item $C' \nsubseteqq T$,
 \item $C' \subseteq T$, toda C' prej še nismo našli. V prvem primeru se tabu-seznam posodablja z dodajanjem katere koli točke iz $C'\setminus T$ (npr. naključne), medtem ko ostane v prvem primeru tabu-seznam tak, kot je. Če se namesto tega izkaže, da je $C'\subseteq T$, toda je C' že bilo najdeno, zavrnemo C' in dodamo v tabu-seznam katero koli izmed točk iz $V\setminus T$.
 \end{enumerate}
 Strategija tabu-seznam zagotavlja, da se bodisi veljavna in nova dominantna množica pridobi pri vsaki iteraciji, ali pa se seznam tabu poveča za eno, s čimer se omeji število iteracij na $max(\lvert V \rvert, \text{\#najdenih gruč})$. Upoštevajmo, da bi lahko na časovno tabelo dodali še več točk, da bi pospešili proces združevanja, pri čemer bi sčasoma našli manjše število dominantnih množic.
+
+
+
+
+
+% vnos delčkov kode in slike poizkusa.
+
+
+
+
+
 
 \end{document}
