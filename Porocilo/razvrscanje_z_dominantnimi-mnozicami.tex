@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{marvosym}
 \usepackage{amssymb,amsmath}
+\usepackage{graphicx}
 \title{Razvrščanje z dominantnimi množicami}
 \author{Taja Debeljak, Anže Marinko \\ Finančni praktikum \\ Finančna matematika, Fakulteta za matematiko in fiziko}
 \date{Jesen 2017}
@@ -135,9 +136,61 @@ V prvem primeru se tabu-seznam posodablja z dodajanjem katere koli točke iz $C'
 Strategija tabu-seznam zagotavlja, da se bodisi veljavna in nova dominantna množica pridobi pri vsaki iteraciji, ali pa se seznam tabu poveča za eno.
 
 \section{Algoritem dinamike okužb in imunizacije s strategijo luščenja}
-\texttt{def delta(w):  \# izbira nakjučnega elementa iz simpleksa\\
- \hspace{3ex}koordinate = element\_simpleksa(len(w))\\
- \hspace{3ex}return np.array(koordinate)}
+\texttt{def delta(n):    \# izbira nakjučnega elementa iz simpleksa}\\
+\hspace*{1cm}\texttt{return element\_simpleksa(n)}\newline \\
+Kjer je element\_simpleksa(n) funkcija, ki vrne naključen vektor dolžine n iz simpleksa, pri čemer je izbira x-a enakomerno porazdeljena na simpleksu.\newline \\
+\texttt{def s(x, matrika):  \# izbira strategije y}\\
+\hspace*{1cm}\texttt{y = gamma(x, matrika)}\\
+\hspace*{1cm}\texttt{if y is None:}\\
+\hspace*{2cm}\texttt{return x}\\
+\hspace*{1cm}\texttt{return y}\newline \\
+Kjer je gamma(x, A) funkcija, ki vrne prvi nakjučen element \texttt{delta(len(x))}, ki zadošča pogoju $(y-x)^TAx > 0$. Če nobeden izmed prvih 10000 naključnih vektorjev ne zadošča temu pogoju, funkcija gamma vrne \texttt{None}.\newline \\
+
+\texttt{def iteracija(x, n):  \# izračun strategije ob času n za začetni vektor (strategijo) x}\\
+\hspace*{1cm}\texttt{w = \lbrack x\lbrack i\rbrack  for i in range(len(x))\rbrack }\\
+\hspace*{1cm}\texttt{if sum(x) != 0:}\\
+\hspace*{2cm}\texttt{ w = \lbrack x\lbrack i\rbrack  / sum(x) for i in range(len(x))\rbrack }
+
+\hspace*{1cm}\texttt{ matrika = \lbrack \lbrack 0 for \_ in range(len(w))\rbrack  for \_ in range(len(w))\rbrack }\\
+\hspace*{1cm}\texttt{for i in range(len(w)):}\\
+\hspace*{2cm}\texttt{for j in range(len(w)):}\\
+\hspace*{3cm}\texttt{if w\lbrack i\rbrack != w\lbrack j\rbrack:}\\
+\hspace*{4cm}\texttt{   matrika\lbrack i\rbrack\lbrack j\rbrack = 1 / abs(w\lbrack i\rbrack - w\lbrack j\rbrack)}\\
+\hspace*{1cm}\texttt{\# A je matrika podobnosti}\\
+
+\hspace*{1cm}\texttt{pop = w}\\
+\hspace*{1cm}\texttt{for \_ in range(1, število iteracij + 1):}\\
+\hspace*{2cm}\texttt{strategija = s(pop, matrika)}\\
+\hspace*{2cm}\texttt{konstanta = konst\_del(strategija, pop, matrika)}\\
+\hspace*{2cm}\texttt{pop = konstanta * (strategija - pop) + pop}\\
+\hspace*{1cm}\texttt{return \lbrack w, pop\rbrack }\newline \\
+Kjer je konst\_del(y, x, A) funkcija, ki vrne $\delta = (x-y)^TAx/((y-x)^TA(y-x))$, če $\delta<1$ in če $(y-x)^TA(y-x)<-1e-16$, sicer vrne 1.\newline \\
+
+\texttt{x = element\_simpleksa(dolžina vektorja) }\\
+\texttt{kor = x }\\
+\texttt{gruca = 0 }\\
+\texttt{gruce = \lbrack 0 for \_ in range(len(kor))\rbrack }\\
+\texttt{while len(kor) > 0: }\\
+\hspace*{1cm}\texttt{gruca += 1 }\\
+\hspace*{1cm}\texttt{itr = iteracija(kor, n=t\_max) }\\
+\hspace*{1cm}\texttt{komp = 0 }\\
+\hspace*{1cm}\texttt{for i in range(len(x)): }\\
+\hspace*{2cm}\texttt{if gruce\lbrack i\rbrack  == 0: }\\
+\hspace*{3cm}\texttt{if itr\lbrack 1\rbrack \lbrack komp\rbrack  > 10 ** (-5/len(kor)**(1/2)) * max(itr\lbrack 1\rbrack ): }\\
+\hspace*{4cm}\texttt{gruce\lbrack i\rbrack  = gruca }\\
+\hspace*{3cm}\texttt{komp += 1 }\\
+\hspace*{1cm}\texttt{kor = \lbrack\rbrack  }\\
+\hspace*{1cm}\texttt{for i in range(len(gruce)): }\\
+\hspace*{2cm}\texttt{if gruce\lbrack i\rbrack  == 0: }\\
+\hspace*{3cm}\texttt{kor.append(x\lbrack i\rbrack ) }\\
+\hspace*{1cm}\texttt{if sum(kor) == 0: }\\
+\hspace*{2cm}\texttt{kor = \lbrack 1/len(kor) for \_ in range(len(kor))\rbrack  }\\
+\texttt{print(gruce) }\newline \\
+
+Navedeni algoritem sva nato pognala na 15 naključno generiranih vektorjih s simpleksa dimenzije 10. Dobljeni rezultat je prikazan na naslednji strani, pri čemer leva navpična črta označuje vrednost 0, desna pa vrednost največje komponente v začetnem vektorju. Ob desnem robu pa je od zgoraj navzdol razporeditev barv gruč od prve proti peti. \\
+Opazimo lahko, da je zaradi strategije luščenja le prva (rdeča) gruča zares pravilno združena, druge pa lahko oklepajo kakšno (ali več) izmed pred njo določenih gruč. Predvsem zadnja gruča običajno združuje vse elemente, ki so ostali do konca izven gruč.\\
+\center{\includegraphics[width=10cm]{dinamika}}\newline \\
+\flushleft
 
 
 \section{Zaključek}
