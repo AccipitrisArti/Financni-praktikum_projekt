@@ -49,6 +49,9 @@ Neprazni množici $C \subseteq V$ za katero je $W(T) > 0$ za vsako neprazno mno�
 \end{enumerate}
 \end{definition}
 
+
+% dodaj definicijo x^C?
+
 \section{Povezava s teorijo optimizacije}
 Če se omejimo na simetrične povezanosti, torej A je simetrična matrika, potem lahko dominantno množico zapišemo kot rešitev naslednjega standardnega kvadratičnega programa
 \begin{gather}
@@ -77,6 +80,10 @@ $$\begin{cases}
 \end{cases}$$
 ki pa ga lahko interpretiramo kot notranjo homogenost gruče predstavljeno s \textit{podporo x-a} $\sigma(x)$, kjer je $\sigma(x) = \{i\in V; x_i > 0\}$ indeksna množica pozitivnih komponent vektorja x.
 Vendar pa Nash ne nujno zagotavlja pogoj maksimuma, kar lahko vseeno zagotovimo z izboljšanjem Nashevega ravnovesja poznanega kot \textit{evolucijsko stabilna strategija (ESS)}. Simetrično Nashevo ravnovesje $x\in\Delta$ je evolucijsko stabilna strategija, če poleg pogoja $y^TAx\leq x^TAx \text{ za vse } y\in\Delta$ zadostuje tudi pogoju $y^TAx= x^TAx \Rightarrow y^TAx<x^TAx \text{ za vse } y\in\Delta\setminus x$.
+
+
+% popravi to trditev ... glej evolutionary stabile strategies na Wikipediji
+
 \begin{theorem}
 Naj bo A matrika podobnosti pri primeru problema združevanja in naj bo $\Gamma$ \textit{clustering game}. Če je C dominantna množica v A, potem je vektor $x^C$ ESS od $\Gamma$. Obratno, če je vektor x ESS od $\Gamma$, potem je $C=\sigma(x)$ dominantna množica od A, če $(Ax)_i\not=x^TAx \text{ za vse } i \not\in C$.
 \end{theorem}
@@ -191,6 +198,10 @@ Navedeni algoritem sva nato pognala na 15 naključno generiranih vektorjih s sim
 Opazimo lahko, da je zaradi strategije luščenja le prva (rdeča) gruča zares pravilno združena, druge pa lahko oklepajo kakšno (ali več) izmed pred njo določenih gruč. Predvsem zadnja gruča običajno združuje vse elemente, ki so ostali do konca izven gruč.\\
 \center{\includegraphics[width=10cm]{dinamika}}\newline \\
 \flushleft
+
+
+% popravi kodo, razlago, bolje opiši algoritem in program ...
+% v algoritmu poravi tisto grdo:10 ** (-(20-natancnost)/(4*len(itr[1]))) * max(itr[1])
 
 
 \section{Zaključek}
