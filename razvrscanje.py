@@ -6,7 +6,7 @@ import random
 import turtle
 
 # privzete vrednosti (stevilo zacetkov, stevilo komponent, maksimalen cas, natancnost)
-it1, st1, cas1, nat1 = 15, 2, 30, 10
+it1, st1, cas1 = 50, 2, 200
 barve1 = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5),
           (1, 0.5, 0), (1, 0, 0.5), (0.5, 1, 0), (0, 1, 0.5), (0.5, 0, 1), (0, 0.5, 1)]
 barve0 = [(1-1/(m**2+1), 1/(m+1), 0) for m in range(20)]
@@ -82,8 +82,8 @@ def iteracija(w, n, ponovitev=1):  # izracun strategije ob casu n, ob konstantni
         pop = np.array(pop)
         konstanta = konst_del(strategija, pop, matrika)
         pop = konstanta * (strategija - pop) + pop
-    # if ponovitev == 1:
-    print('x( t={} ) = {}\nx( t={} ) = {}'.format(0, w, n, pop))
+    if ponovitev == 1:
+        print('x( t={} ) = {}\nx( t={} ) = {}'.format(0, w, n, pop))
     return [w, pop]
 
 
@@ -112,23 +112,24 @@ def narisi(zelva, koordinate1, gruce, barve=barve0):
 
 
 def koordinatni_sistem(zelva):
+    zelva.clear()
     zelva.goto(-250, -250)
     zelva.pendown()
     zelva.goto(-250, 250)
     zelva.penup()
-    zelva.goto(251, 250)
+    zelva.goto(250, 250)
     zelva.pendown()
-    zelva.goto(251, -250)
+    zelva.goto(250, -250)
     zelva.penup()
     zelva.pen(pencolor='grey')
     for i in range(10):
         zelva.goto(-250, - i * 500 / (10 - 1) + 250)
         zelva.pendown()
-        zelva.goto(251, - i * 500 / (10 - 1) + 250)
+        zelva.goto(250, - i * 500 / (10 - 1) + 250)
         zelva.penup()
         zelva.goto(- i * 500 / (10 - 1) + 250, -250)
         zelva.pendown()
-        zelva.goto(- i * 500 / (10 - 1) + 251, 250)
+        zelva.goto(- i * 500 / (10 - 1) + 250, 250)
         zelva.penup()
     zelva.pen(pensize=10)
     for i in range(len(barve0)):
@@ -146,7 +147,7 @@ def koordinatni_sistem(zelva):
     zelva.goto(-1000, -1000)
 
 
-def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False, natancnost=nat1):
+def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False):
     #   iteracija nakljucno generiranih zacetnih strategij
     if zel1 and st_komponent <= 2:
         zelva = turtle.Turtle()
@@ -173,7 +174,7 @@ def simulacija(st_iteracij=10, st_komponent=3, t_max=100, zel1=False, natancnost
         else:
             for i in range(len(koordinate1)):
                 if gruce[i] == 0:
-                    if itr[1][komp] > 10 ** (-(20-natancnost)/(4*len(itr[1]))) * max(itr[1]):
+                    if itr[1][komp] > 1/len(kor):
                         gruce[i] = gruca
                     komp += 1
                 kor = []
@@ -206,15 +207,10 @@ while vklop:
             zel = True
     else:
         zel = False
-    nat = input('Zeljena natancnost razdelitve (privzeto {}): '.format(nat1))
-    if nat not in [str(i) for i in range(20)]:
-        nat = nat1
-    else:
-        nat = int(nat)
     print('\nSimulacija(st_tock = {}, st_komponent = {}, max_cas = {}, zelva = {})\n'.format(
         it, st, cas, zel
     ))
-    simulacija(int(it), int(st), int(cas), zel, natancnost=nat)
+    simulacija(int(it), int(st), int(cas), zel)
     nadaljuj = input("\nNadaljuj ([1]='DA' (privzeto) ali [0]='NE')? ")
     if nadaljuj in {'0'}:
         vklop = False
